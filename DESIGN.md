@@ -1349,3 +1349,9 @@ Reference: /Users/imran/Desktop/ClaudeProjects/AI Design System/CLAUDE.md
 
 Component request: [describe the component, its states, and any variant requirements here]
 ```
+
+---
+
+## About
+
+Luma was designed and built by [Imran](https://imran.fi/) — a Senior Product Designer focused on design systems and AI-assisted workflows.

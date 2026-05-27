@@ -940,3 +940,9 @@ figma.connect(Button, 'FIGMA_NODE_URL', {
 ```
 
 Publish: `pnpm figma:publish`
+
+---
+
+## About
+
+Luma was designed and built by [Imran](https://imran.fi/) — a Senior Product Designer focused on design systems and AI-assisted workflows.

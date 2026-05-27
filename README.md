@@ -151,6 +151,6 @@ pnpm storybook    # component explorer
 
 ## About
 
-LumaUI was designed and built by [Imran](https://yourportfolio.com) — a Senior Product Designer with a focus on design systems, B2B SaaS, and AI-assisted workflows. The `CLAUDE.md` + `DESIGN.md` pairing came out of real production work: using a structured brand constitution as the AI context layer so that generated components are correct by default, not by iteration.
+LumaUI was designed and built by [Imran](https://imran.fi/) — a Senior Product Designer with a focus on design systems, B2B SaaS, and AI-assisted workflows. The `CLAUDE.md` + `DESIGN.md` pairing came out of real production work: using a structured brand constitution as the AI context layer so that generated components are correct by default, not by iteration.
 
 The goal was to build a system that a small team could adopt and maintain with confidence — and that a solo developer could onboard into in under an hour using Claude Code.

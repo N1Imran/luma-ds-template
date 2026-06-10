@@ -1,26 +1,28 @@
 # LumaUI
 
-A React design system template you can fork, make your own, and ship. Built for B2B SaaS and product teams who want a solid foundation without starting from scratch.
+An AI-readable design system specification. Luma answers one question: what does it take for an AI coding tool to generate UI that is already on-brand, with no style cleanup and no back-and-forth?
 
-**Stack:** React · TypeScript · Radix UI · Tailwind CSS v4 · Storybook
+**Luma is a portfolio project, not an open-source template.** You are welcome to clone it and test it with your AI tools. It is not licensed for reuse in your own products. See [License](#license).
+
+**Target stack:** React · TypeScript · Radix UI · Tailwind CSS v4 · OKLCH color science
 
 ---
 
 ## The idea
 
-Most design system templates give you components. LumaUI gives you components *and* a way to work with AI tools without losing consistency.
+Most design systems are documented for humans. Luma is documented for AI tools first. The repo is the documentation layer of the system, and it does the heavy lifting through three files:
 
-The repo ships two files that do the heavy lifting:
+**`DESIGN.md`** — the canonical brand spec, written in the DESIGN.md format that Google Stitch introduced and that Claude Code, Cursor, and Windsurf read natively. Machine-readable tokens live in the YAML front matter; the reasoning behind every decision lives in the prose. Colors, typography, spacing, elevation, shapes, 20+ component specs, accessibility rules, and explicit guardrails for agents.
 
-**`DESIGN.md`** — the complete design spec. Every color, spacing value, typography scale, and component definition in one place. Edit this file to match your brand.
+**`CLAUDE.md`** — the engineering constitution. Claude Code reads it automatically at the start of every session: the three-layer token architecture, component patterns, dark mode rules, iconography, and Figma conventions.
 
-**`CLAUDE.md`** — a constitution for AI tools. Claude Code reads this automatically at the start of every session, so when you ask it to build a new component, it already knows your tokens, your rules, and your architecture. The output is correct from the first message — no style cleanup, no back-and-forth.
+**`AGENTS.md`** — the entry point for every other agent (Cursor, Codex, Gemini CLI), pointing to the two files above.
 
 ---
 
 ## Token architecture
 
-Tokens are organized in three layers so you can change one thing without breaking everything else:
+Tokens are organized in three layers so one change propagates cleanly:
 
 ```
 Primitive    --luma-brand-600, --luma-neutral-50
@@ -30,44 +32,35 @@ Semantic     --primary, --background, --border
 Component    --button-primary-bg, --card-radius
 ```
 
-Dark mode lives in one place — a single `.dark {}` block. Components never need to know about it.
+Colors are OKLCH throughout, so every scale step is perceptually uniform and dark mode works from a single `.dark {}` alias swap. Components never know dark mode exists.
 
 ---
 
-## Making it yours
+## Try it
 
-1. Fork the repo
-2. Edit `DESIGN.md` — change colors, type scale, spacing, radius to match your brand
-3. Run `pnpm tokens:gen-components` to regenerate the token CSS
-4. Open Claude Code — it picks up your changes automatically
+1. Clone the repo
+2. Open Claude Code (or Cursor, or any agent that reads `AGENTS.md`) in the folder
+3. Ask for a screen: *"Build a settings page with a sidebar, a profile form, and a danger zone"*
+4. The output uses Luma's tokens, spacing, radius, and component rules from the first message
 
----
-
-## What's included
-
-| | |
-|---|---|
-| **Tokens** | Color, typography, spacing, radius, shadow, motion |
-| **Components** | Button, Input, Select, Card, Badge, Alert, Dialog, Toast, Tabs, Table, Sidebar, and more |
-| **Dark mode** | First-class — zero per-component overrides |
-| **Storybook** | All components documented with variants and states |
-| **Figma** | Code Connect — real import code in Dev Mode |
+That is the whole demo. The spec is the product.
 
 ---
 
-## Quick start
+## What this repo is, and is not
 
-```bash
-git clone https://github.com/N1Imran/luma-ds-template
-cd luma-ds-template
-pnpm install
-pnpm dev
-```
+This repo contains the specification layer of Luma: the files an AI tool needs to ship on-brand UI. The full implementation, with 56 React components, 300+ documented Storybook examples, and a Figma library wired up through Code Connect, is a separate private project. If you are a hiring manager or potential client and want a walkthrough, get in touch.
+
+---
+
+## License
+
+Licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). In short: clone it, study it, test it with your tools, share it with credit. Do not use it commercially, distribute modified versions, or present it as your own. See [LICENSE](LICENSE) for details, or contact me for anything beyond these terms.
 
 ---
 
 ## About
 
-Built by [Imran](https://imran.fi/) — a Senior Product Designer focused on design systems and AI-assisted workflows. LumaUI came out of a real question: what does it take for an AI tool to generate components that are already correct, without needing to be corrected?
+Built by [Imran](https://imran.fi/), a Senior Product Designer focused on design systems and AI-assisted workflows. LumaUI came out of a real question: what does it take for an AI tool to generate components that are already correct, without needing to be corrected?
 
-The answer was a structured spec file the AI reads before writing a single line of code.
+The answer was a structured spec the AI reads before writing a single line of code.

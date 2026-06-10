@@ -2,21 +2,32 @@
 name: Luma Design System
 description: Token-driven React design system. Zero hardcoded colours. Automatic dark mode via OKLCH semantic aliases.
 colors:
-  primary: "#0070f3"
+  # Values mirror DESIGN.md, the canonical brand token source. Edit DESIGN.md first, then sync here.
+  primary: "#0060d4"                # brand-600 · oklch(0.46 0.24 254)
+  primary-hover: "#1472e8"
+  primary-pressed: "#004fb8"
+  primary-disabled: "#8db8ef"
   primary-foreground: "#ffffff"
-  secondary: "#f4f4f5"
-  secondary-foreground: "#18181b"
+  secondary: "#f2f2f5"              # surface-2
+  secondary-foreground: "#0f0f16"   # ink
   background: "#ffffff"
-  foreground: "#0a0a0a"
+  foreground: "#0f0f16"             # ink
   card: "#ffffff"
-  muted: "#f4f4f5"
-  muted-foreground: "#71717a"
-  border: "#e4e4e7"
-  input: "#e4e4e7"
-  destructive: "#ef4444"
-  success: "#22c55e"
-  warning: "#f59e0b"
-  info: "#3b82f6"
+  muted: "#f9f9fb"                  # surface-1
+  muted-foreground: "#55556b"       # ink-muted
+  border: "#e8e8ed"                 # hairline
+  input: "#e8e8ed"                  # hairline
+  destructive: "#e03131"            # irreversible actions · hue 25
+  destructive-foreground: "#ffffff"
+  error: "#e03131"                  # validation states
+  success: "#169a45"                # hue 145
+  success-foreground: "#ffffff"
+  success-bg: "#edfcf2"
+  success-text: "#155c2b"
+  warning: "#f4ad0a"                # hue 72
+  warning-foreground: "#111111"     # dark text: amber + white fails WCAG AA
+  info: "#3b7ef4"                   # hue 240
+  info-foreground: "#ffffff"
 typography:
   display:
     fontFamily: Geist
@@ -54,6 +65,11 @@ typography:
   body-sm:
     fontFamily: Geist
     fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.5
+  body-sm-strong:
+    fontFamily: Geist
+    fontSize: 14px
     fontWeight: 500
     lineHeight: 1.5
   caption:
@@ -61,6 +77,13 @@ typography:
     fontSize: 12px
     fontWeight: 400
     lineHeight: 1.5
+  label:
+    fontFamily: Geist
+    fontSize: 12px
+    fontWeight: 500
+    lineHeight: 1.5
+    letterSpacing: 0.08em
+    textTransform: uppercase
   mono:
     fontFamily: Geist Mono
     fontSize: 13px
@@ -74,7 +97,8 @@ rounded:
   lg: 8px
   xl: 12px
   2xl: 16px
-  full: 9999px
+  3xl: 24px
+  pill: 9999px    # maps to --luma-radius-full in CSS
 spacing:
   base: 4px
   xs: 4px
@@ -89,40 +113,45 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.primary-foreground}"
     rounded: "{rounded.md}"
-    typography: "{typography.body-sm}"
+    typography: "{typography.body-sm-strong}"
     height: 36px
     padding: 16px
   button-primary-hover:
-    backgroundColor: "#0060df"
+    backgroundColor: "{colors.primary-hover}"
+  button-primary-pressed:
+    backgroundColor: "{colors.primary-pressed}"
+  button-primary-disabled:
+    backgroundColor: "{colors.primary-disabled}"
   button-secondary:
     backgroundColor: "{colors.secondary}"
     textColor: "{colors.secondary-foreground}"
     rounded: "{rounded.md}"
-    typography: "{typography.body-sm}"
+    typography: "{typography.body-sm-strong}"
     height: 36px
     padding: 16px
   button-outline:
     backgroundColor: transparent
     textColor: "{colors.foreground}"
     rounded: "{rounded.md}"
-    typography: "{typography.body-sm}"
+    typography: "{typography.body-sm-strong}"
     height: 36px
     padding: 16px
+    border: "1px solid {colors.border}"
   button-destructive:
     backgroundColor: "{colors.destructive}"
-    textColor: "#ffffff"
+    textColor: "{colors.destructive-foreground}"
     rounded: "{rounded.md}"
     height: 36px
     padding: 16px
   button-success:
     backgroundColor: "{colors.success}"
-    textColor: "#ffffff"
+    textColor: "{colors.success-foreground}"
     rounded: "{rounded.md}"
     height: 36px
     padding: 16px
   button-warning:
     backgroundColor: "{colors.warning}"
-    textColor: "#1a1a1a"
+    textColor: "{colors.warning-foreground}"
     rounded: "{rounded.md}"
     height: 36px
     padding: 16px
@@ -139,6 +168,8 @@ components:
     rounded: "{rounded.md}"
     height: 36px
     padding: 12px
+    border: "1px solid {colors.error}"
+    ring: "1px {colors.error}"
   card:
     backgroundColor: "{colors.card}"
     rounded: "{rounded.xl}"
@@ -150,8 +181,8 @@ components:
     typography: "{typography.caption}"
     padding: 8px
   badge-success:
-    backgroundColor: "#dcfce7"
-    textColor: "#16a34a"
+    backgroundColor: "{colors.success-bg}"
+    textColor: "{colors.success-text}"
     rounded: "{rounded.md}"
     typography: "{typography.caption}"
     padding: 8px
@@ -168,7 +199,7 @@ components:
 > 2. **Semantic aliases** (`--primary`, `--background`, `--border`) — the values components reference for theming
 > 3. **Component tokens** (`--button-primary-bg`, `--card-radius`, `--input-height`) — per-component slots that reference semantic aliases
 >
-> The YAML front matter above is the **source of truth for the component-token layer** — `pnpm tokens:gen-components` reads it and regenerates `src/tokens/components.generated.css`. The CSS vars in `src/tokens/` are the canonical implementation; the YAML's sRGB hex values exist for AI-tool interoperability (Stitch, Cursor, etc. that parse the spec without reading CSS).
+> **Token source of truth:** brand token values are canonical in `DESIGN.md` (its YAML front matter). The YAML front matter above mirrors those values for the component-token layer; `pnpm tokens:gen-components` reads it and regenerates `src/tokens/components.generated.css`. The CSS vars in `src/tokens/` are the canonical implementation; the YAML's sRGB hex values exist for AI-tool interoperability (Stitch, Cursor, etc. that parse the spec without reading CSS). If `DESIGN.md` and this file ever disagree, `DESIGN.md` wins.
 
 ---
 
@@ -655,6 +686,8 @@ Every component exposes a set of CSS custom properties prefixed with its name. U
 ---
 
 ## Components
+
+> **Picking between overlapping components** (Dialog vs Sheet vs Popover, Toast vs Alert vs Note, which Button variant, Radio vs Select vs Combobox): follow the decision tables in `DESIGN.md → Components → Choosing the right component`. They are the tie-breakers; do not improvise.
 
 ### Typography primitive
 

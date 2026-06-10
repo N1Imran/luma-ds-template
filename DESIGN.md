@@ -1,5 +1,5 @@
 ---
-version: "1.1.0"
+version: "1.2.0"
 name: Luma
 description: |
   Luma is a light-first, product-software design system built on OKLCH color science and a Geist-inspired
@@ -238,15 +238,16 @@ rounded:
   pill: "9999px"  # Avatar, StatusDot, pill badges, toggle thumbs
 
 spacing:
-  xxs:     "4px"
-  xs:      "8px"
-  sm:      "12px"
+  # Aliases match the CSS implementation scale (--luma-space-*) one to one.
+  # 12px has no t-shirt alias by design; use the numeric scale (--luma-space-3).
+  xs:      "4px"
+  sm:      "8px"
   md:      "16px"
   lg:      "24px"
   xl:      "32px"
   2xl:     "48px"
   3xl:     "64px"
-  section: "96px"  # page-level vertical rhythm — between major sections
+  section: "96px"  # page-level vertical rhythm, between major sections
 
 components:
   # ── Button ────────────────────────────────────────────────────────────────
@@ -1121,14 +1122,14 @@ The sidebar at 240px is the shadcn default and matches Linear and Vercel's dashb
 
 ### Spacing
 
-4px base grid. All spacing is a multiple of 4. The t-shirt aliases are the preferred API:
+4px base grid. All spacing is a multiple of 4. The t-shirt aliases are the preferred API and match the CSS `--luma-space-*` scale one to one:
 
 ```
-xxs: 4px   xs: 8px   sm: 12px   md: 16px
-lg: 24px   xl: 32px  2xl: 48px  3xl: 64px  section: 96px
+xs: 4px    sm: 8px    md: 16px   lg: 24px
+xl: 32px   2xl: 48px  3xl: 64px  section: 96px
 ```
 
-Internal component padding (8–16px) uses the lower half of the scale. Page-level white space (32–96px) uses the upper half.
+12px has no t-shirt alias by design; reach for the numeric scale (`--luma-space-3`) when a component needs it. Internal component padding (8–16px) uses the lower half of the scale. Page-level white space (32–96px) uses the upper half.
 
 ---
 
@@ -1159,6 +1160,30 @@ Ring opacity by elevation level: xs → 4%, sm → 5%, md → 6%, lg → 8%, xl 
 
 ---
 
+## Shapes
+
+Vercel-standard radius language: one consistent 6px default that feels modern without being pill-heavy. Never mix radius scales within a single component group.
+
+| Token | Value | Use |
+|---|---|---|
+| `rounded.none` | 0 | Tables, full-bleed surfaces |
+| `rounded.xs` | 2px | Dense inline elements |
+| `rounded.sm` | 4px | Checkbox, small chips |
+| `rounded.md` | 6px | Default: Button, Input, Badge, Select, Combobox |
+| `rounded.lg` | 8px | Alert, Note, dropdown menus, Skeleton, Toast |
+| `rounded.xl` | 12px | Card, Dialog, Sheet |
+| `rounded.2xl` | 16px | Large panels, marketing surfaces |
+| `rounded.3xl` | 24px | Hero containers (rare) |
+| `rounded.pill` | 9999px | Avatar, StatusDot, pill badges, toggle thumbs |
+
+Rules:
+
+- The same component family always shares one radius. All buttons are `md`; all cards are `xl`.
+- Pill shapes are reserved for elements that are circular or capsule by nature (avatars, status dots, toggle thumbs). Buttons are never pills.
+- Nested radii step down: a `xl` card containing an interactive control uses `md` inside, never the same value.
+
+---
+
 ## Components
 
 ### State coverage every interactive component must have
@@ -1172,6 +1197,58 @@ Every interactive component needs all five states modeled:
 | **Focus** | `:focus-visible` | 2px ring, 2px offset, primary color |
 | **Pressed / Active** | `:active` | Darker background or scale |
 | **Disabled** | `[disabled]` / `aria-disabled` | 0.5–0.6 opacity, no pointer-events |
+
+### Choosing the right component
+
+Overlapping components are the place AI tools (and humans) most often pick wrong. These tables are the tie-breakers; follow them exactly.
+
+**Overlays** — anything that floats above the page:
+
+| Need | Use | Never |
+|---|---|---|
+| Blocking decision or confirmation the user must answer | Dialog | Toast for confirmations |
+| Complex editing or detail view that keeps page context | Sheet | Dialog for long forms |
+| Small contextual content anchored to a trigger | Popover | Dialog for a date picker |
+| A list of actions on an element | Dropdown Menu | Popover with hand-rolled buttons |
+| Label or hint on hover, no interaction inside | Tooltip | Interactive content in a Tooltip |
+
+**Feedback and status:**
+
+| Need | Use |
+|---|---|
+| Result of an action just performed, transient | Toast |
+| Persistent condition of a page or section, status-colored | Alert |
+| Persistent inline tip or guidance, quieter than Alert | Note |
+| Count or category on an item in lists and tables | Badge |
+| Live presence or system state, paired with a label | StatusDot |
+| Removable filter or input value | Chip |
+| Active waiting after a user action (submit, fetch) | Spinner |
+| Passive loading of page or section content | Skeleton |
+| Determinate long-running operation | Progress |
+| Nothing to display yet | Empty State |
+
+**Button variants** — emphasis is a ladder, not a palette:
+
+| Variant | Use when |
+|---|---|
+| `default` (primary) | The single most important action on the surface. One per view, no exceptions. |
+| `secondary` | The action sitting next to a primary (Cancel beside Save) |
+| `outline` | Standalone medium-emphasis actions, toolbars, filters |
+| `ghost` | Low-emphasis or repeated actions in dense UI (table rows, list items) |
+| `link` | Navigation styled as text, inline with content |
+| `destructive` | Irreversible actions only (delete, revoke). Always confirm via Dialog. |
+| `success` / `warning` / `info` | Status-tinted actions, rare. Never a substitute for primary. |
+
+**Selection controls:**
+
+| Situation | Use |
+|---|---|
+| 2–5 options, all visible at once aids the decision | Radio group |
+| Up to 6 options, compact space | Select |
+| 7+ options, or users know what they're typing | Combobox |
+| Multiple independent choices | Checkbox group |
+| Binary setting that applies instantly, no Save button | Switch |
+| Binary choice submitted with a form | Checkbox |
 
 ### Component notes
 

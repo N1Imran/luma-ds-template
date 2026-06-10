@@ -1,0 +1,26 @@
+Luma Design System Specification
+Copyright (c) 2026 Muhammad Imran (https://imran.fi)
+
+This work is licensed under the Creative Commons
+Attribution-NonCommercial-NoDerivatives 4.0 International License
+(CC BY-NC-ND 4.0).
+
+Full license text: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+In plain terms:
+
+  You may:
+  - View, clone, and study this repository.
+  - Test the specification locally with AI coding tools
+    (Claude Code, Cursor, Stitch, and similar).
+  - Share unmodified copies, with attribution to the author.
+
+  You may not:
+  - Use this work, or derivatives of it, for commercial purposes.
+  - Distribute modified versions of this work.
+  - Rebrand or present this work, in whole or in part, as your own.
+
+Luma is a portfolio project. It exists to demonstrate how a design
+system can be specified so that AI tools generate on-brand UI without
+correction. If you would like to use it beyond the terms above, contact
+the author: info@imran.fi

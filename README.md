@@ -12,7 +12,7 @@ An AI-readable design system specification. Luma answers one question: what does
 
 Most design systems are documented for humans. Luma is documented for AI tools first. The repo is the documentation layer of the system, and it does the heavy lifting through three files:
 
-**`DESIGN.md`** — the canonical brand spec, written in the DESIGN.md format that Google Stitch introduced and that Claude Code, Cursor, and Windsurf read natively. Machine-readable tokens live in the YAML front matter; the reasoning behind every decision lives in the prose. Colors, typography, spacing, elevation, shapes, 20+ component specs, accessibility rules, and explicit guardrails for agents.
+**`DESIGN.md`** — the canonical brand spec, written in the DESIGN.md format that Google Stitch introduced and that Claude Code, Cursor, and Windsurf read natively. Machine-readable tokens live in the YAML front matter; the reasoning behind every decision lives in the prose. Colors, typography, spacing, elevation, shapes, 45+ component specs with states, decision tables for picking between overlapping components, accessibility rules, and explicit guardrails for agents.
 
 **`CLAUDE.md`** — the engineering constitution. Claude Code reads it automatically at the start of every session: the three-layer token architecture, component patterns, dark mode rules, iconography, and Figma conventions.
 

@@ -496,7 +496,7 @@ var(--luma-ease-bounce)       /* cubic-bezier(0.34, 1.56, 0.64, 1) */
 
 ## Iconography
 
-Luma uses **Lucide** (`lucide-react`) for every icon. 1,400+ open-source icons designed on a consistent 24×24 grid with rounded stroke endings. Tree-shakeable — only the icons you import ship to production.
+Luma uses **Lucide** (`lucide-react`) for every icon. 1,500+ open-source icons designed on a consistent 24×24 grid with rounded stroke endings. Tree-shakeable — only the icons you import ship to production.
 
 ### Sizes & strokes
 

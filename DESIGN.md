@@ -1,5 +1,5 @@
 ---
-version: "1.2.0"
+version: "1.3.0"
 name: Luma
 description: |
   Luma is a light-first, product-software design system built on OKLCH color science and a Geist-inspired
@@ -93,8 +93,9 @@ colors:
   # destructive = irreversible action buttons (delete, revoke dialogs)
   # error       = validation states (input rings, error banners, toasts)
   # Both resolve to the same red solid. The distinction is semantic intent.
-  destructive:    "#e03131"
-  on-destructive: "#ffffff"
+  destructive:       "#e03131"
+  destructive-hover: "#c02020"     # oklch(0.44 0.22 25), darker red
+  on-destructive:    "#ffffff"
 
   # ── Inverse & overlay ──────────────────────────────────────────────────────
   inverse-canvas: "#0a0a0a"         # dark panel on a light page
@@ -332,13 +333,38 @@ components:
     height: "36px"
 
   button-destructive-hover:
-    backgroundColor: "#c02020"      # oklch(0.44 0.22 25) — darker red
+    backgroundColor: "{colors.destructive-hover}"
     textColor: "{colors.on-destructive}"
 
   button-destructive-disabled:
     backgroundColor: "{colors.error-bg}"
     textColor: "{colors.error-text}"
     opacity: 0.6
+
+  # Status buttons: rare, never a substitute for primary. See the variant table.
+  button-success:
+    backgroundColor: "{colors.success}"
+    textColor: "{colors.on-success}"
+    typography: "{typography.body-sm-strong}"
+    rounded: "{rounded.md}"
+    padding: "0 16px"
+    height: "36px"
+
+  button-warning:
+    backgroundColor: "{colors.warning}"
+    textColor: "{colors.on-warning}"   # dark text: amber + white fails WCAG AA
+    typography: "{typography.body-sm-strong}"
+    rounded: "{rounded.md}"
+    padding: "0 16px"
+    height: "36px"
+
+  button-info:
+    backgroundColor: "{colors.info}"
+    textColor: "{colors.on-info}"
+    typography: "{typography.body-sm-strong}"
+    rounded: "{rounded.md}"
+    padding: "0 16px"
+    height: "36px"
 
   # ── Input ─────────────────────────────────────────────────────────────────
   input-default:
@@ -364,6 +390,17 @@ components:
     textColor: "{colors.ink-disabled}"
     border: "1px solid {colors.hairline-subtle}"
     opacity: 0.6
+
+  # ── Textarea ──────────────────────────────────────────────────────────────
+  # Focus, error, and disabled states mirror input-* exactly.
+  textarea:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.md}"
+    minHeight: "72px"
+    padding: "8px 12px"
+    border: "1px solid {colors.hairline}"
 
   # ── Checkbox ──────────────────────────────────────────────────────────────
   checkbox-default:
@@ -444,6 +481,32 @@ components:
   select-item-disabled:
     textColor: "{colors.ink-disabled}"
     opacity: 0.5
+
+  # ── Combobox ──────────────────────────────────────────────────────────────
+  # Searchable select for 7+ options. Trigger, menu, and items mirror Select;
+  # adds a search input pinned to the top of the menu.
+  combobox-trigger:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-sm-strong}"
+    rounded: "{rounded.md}"
+    height: "36px"
+    padding: "0 12px"
+    border: "1px solid {colors.hairline}"
+
+  combobox-search:
+    height: "32px"
+    padding: "0 8px"
+    typography: "{typography.body-sm}"
+    borderBottom: "1px solid {colors.hairline-subtle}"
+
+  combobox-menu:
+    backgroundColor: "{colors.canvas}"
+    border: "1px solid {colors.hairline}"
+    rounded: "{rounded.lg}"
+    padding: "4px"
+    shadow: "md"
+    maxHeight: "300px"
 
   # ── Switch / Toggle ───────────────────────────────────────────────────────
   switch-off:
@@ -578,6 +641,26 @@ components:
 
   progress-fill-error:
     backgroundColor: "{colors.error}"
+
+  # ── Slider ────────────────────────────────────────────────────────────────
+  slider-track:
+    backgroundColor: "{colors.surface-2}"
+    rounded: "{rounded.pill}"
+    height: "6px"
+
+  slider-fill:
+    backgroundColor: "{colors.primary}"
+    rounded: "{rounded.pill}"
+
+  slider-thumb:
+    backgroundColor: "{colors.canvas}"
+    border: "1px solid {colors.hairline-strong}"
+    rounded: "{rounded.pill}"
+    size: "16px"
+    shadow: "sm"
+
+  slider-thumb-focus:
+    ring: "{colors.primary-ring}"
 
   # ── Spinner ───────────────────────────────────────────────────────────────
   spinner:
@@ -781,6 +864,64 @@ components:
     shadow: "lg"
     overlayBackground: "{colors.overlay-bg}"
 
+  # ── Sheet / Drawer ────────────────────────────────────────────────────────
+  # Slides in from an edge and keeps page context. Use for complex editing
+  # flows that would overload a Dialog.
+  sheet:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"     # on the floating edge only
+    padding: "24px"
+    width: "400px"              # left/right sheets; top/bottom hug content
+    shadow: "lg"
+    overlayBackground: "{colors.overlay-bg}"
+
+  # ── Popover ───────────────────────────────────────────────────────────────
+  popover:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    border: "1px solid {colors.hairline}"
+    rounded: "{rounded.lg}"
+    padding: "16px"
+    shadow: "md"
+    maxWidth: "320px"
+
+  # ── Hover Card ────────────────────────────────────────────────────────────
+  # Rich preview on hover (user cards, link previews). Content is read-only.
+  hover-card:
+    backgroundColor: "{colors.canvas}"
+    border: "1px solid {colors.hairline}"
+    rounded: "{rounded.lg}"
+    padding: "16px"
+    shadow: "md"
+    maxWidth: "320px"
+    openDelay: "300ms"
+
+  # ── Command Palette ───────────────────────────────────────────────────────
+  command:
+    backgroundColor: "{colors.canvas}"
+    border: "1px solid {colors.hairline}"
+    rounded: "{rounded.xl}"
+    shadow: "xl"
+    maxWidth: "560px"
+    overlayBackground: "{colors.overlay-bg}"
+
+  command-input:
+    height: "44px"
+    padding: "0 16px"
+    typography: "{typography.body}"
+    borderBottom: "1px solid {colors.hairline-subtle}"
+
+  command-item:
+    textColor: "{colors.ink}"
+    typography: "{typography.body-sm-strong}"
+    rounded: "{rounded.md}"
+    padding: "8px"
+
+  command-item-active:
+    backgroundColor: "{colors.primary-subtle}"
+    textColor: "{colors.primary}"
+
   # ── Tooltip ───────────────────────────────────────────────────────────────
   tooltip:
     backgroundColor: "{colors.ink}"
@@ -805,6 +946,56 @@ components:
     padding: "2px 8px"
     border: "1px solid {colors.hairline}"
 
+  # ── Kbd ───────────────────────────────────────────────────────────────────
+  kbd:
+    backgroundColor: "{colors.surface-1}"
+    textColor: "{colors.ink-muted}"
+    typography: "{typography.mono}"
+    rounded: "{rounded.sm}"
+    padding: "0 6px"
+    height: "20px"
+    border: "1px solid {colors.hairline}"
+    borderBottomWidth: "2px"    # key-cap depth
+
+  # ── Code ──────────────────────────────────────────────────────────────────
+  code-block:
+    backgroundColor: "{colors.surface-1}"
+    textColor: "{colors.ink}"
+    typography: "{typography.mono}"
+    rounded: "{rounded.lg}"
+    padding: "16px"
+    border: "1px solid {colors.hairline}"
+
+  inline-code:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.ink}"
+    typography: "{typography.mono}"
+    rounded: "{rounded.sm}"
+    padding: "2px 6px"
+
+  # ── Note ──────────────────────────────────────────────────────────────────
+  # Persistent inline guidance, quieter than Alert: neutral surface, no status
+  # tint except the icon. Variants: tip, info, warning.
+  note:
+    backgroundColor: "{colors.surface-1}"
+    textColor: "{colors.ink-body}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.lg}"
+    padding: "12px 16px"
+    border: "1px solid {colors.hairline}"
+    gap: "12px"
+
+  # ── Status Dot ────────────────────────────────────────────────────────────
+  # Always pair with a text label. Solid status colors; pulse for live states.
+  status-dot:
+    rounded: "{rounded.pill}"
+    size-xs: "6px"
+    size-sm: "8px"      # default
+    size-md: "10px"
+    size-lg: "12px"
+    # Colors: solid status tokens (success / warning / error / info);
+    # neutral state uses {colors.ink-subtle}
+
   # ── Link ──────────────────────────────────────────────────────────────────
   link-default:
     textColor: "{colors.primary}"
@@ -819,19 +1010,25 @@ components:
     textColor: "{colors.ink}"
     border: "1px solid {colors.hairline}"
 
+  # ── Separator ─────────────────────────────────────────────────────────────
+  separator:
+    backgroundColor: "{colors.hairline}"
+    thickness: "1px"
+
 icons:
   library: "Lucide"
   style: "line"
-  strokeWidth: 1.5
   strokeLinecap: "round"
   strokeLinejoin: "round"
   sizes:
-    xs: "12px"
-    sm: "16px"
-    md: "20px"
-    lg: "24px"
-    xl: "32px"
-  note: "1500+ icons available. Default size in components is 16px (sm). Toolbar / nav icons use 20px (md)."
+    xs: "12px"        # badges, dense inline contexts
+    sm: "16px"        # inputs, alerts, sidebar nav items
+    md: "20px"        # buttons (all sizes, including icon-only), headings
+    lg: "24px"        # hero moments, standalone illustration
+  strokeWidth:
+    small: "1px"      # icons under 20px
+    default: "2px"    # icons 20px and up
+  note: "1,500+ icons. Stroke scales with size: under 20px gets 1px, 20px and up gets 2px, no exceptions. Button icons are always 20px regardless of the button's size prop. Empty-state hero icons are 48px. Icons inherit color from the parent's currentColor; never set icon color directly."
 
 motion:
   instant:
@@ -911,6 +1108,12 @@ voice:
     - "Dark mode is free if you use semantic aliases."
     - "Don't hardcode hex values in components. Don't write .dark overrides in component files."
 ---
+
+> **Map of this file** — the YAML front matter above is the machine-readable token source (colors, layout, typography, rounded, spacing, ~45 component specs, icons, motion, elevation, z-index, imagery, voice). The prose below explains the reasoning and the rules:
+>
+> [Overview](#overview) · [Colors](#colors) (OKLCH derivation, semantic aliases) · [Dark Mode](#dark-mode) (surface ladder, border strategy) · [Typography](#typography) (11 roles) · [Layout](#layout) (grid, containers, breakpoints, spacing) · [Elevation & Depth](#elevation--depth) · [Shapes](#shapes) (radius rules) · [Components](#components) (state coverage, **choosing the right component**, per-component notes) · [Accessibility](#accessibility) · [Do's & Don'ts](#dos--donts) · [Agent Usage](#agent-usage)
+>
+> If you read only three things: the semantic alias reference in Colors, the "Choosing the right component" tables, and Do's & Don'ts.
 
 ## Overview
 
@@ -1070,6 +1273,8 @@ Luma's type scale is tuned for dense product UI, not marketing sites. The decisi
 | `label` | 12px · 500 | 1.25 | 0.1em | Section labels |
 | `eyebrow` | 12px · 500 | 1.25 | 0.08em | Table headers, category tags — **+ uppercase** |
 | `mono` | 13px · 400 | 1.5 | 0 | Code, tokens, keyboard shortcuts |
+
+Naming bridge: the spec role `body` is exposed as `body-md` in the React `<Text>` API (`<Text variant="body-md">`). All other role names match 1:1.
 
 ---
 
@@ -1275,6 +1480,26 @@ Overlapping components are the place AI tools (and humans) most often pick wrong
 **Empty State** — Icon at 48px on a `--surface-2` rounded background. Title in `body-sm-strong`, description in `body-sm` tone muted. Actions use standard `<Button>` — primary CTA if there's one action, outline if secondary.
 
 **Progress** — Track is `--surface-2`, fill defaults to `--primary`. Status variants (success/warning/error) use their solid colors, not the bg/border/text tokens.
+
+**Textarea** — Mirrors Input for focus, error, and disabled states. Min-height 72px (three lines of `body-sm`). Resize vertical only — horizontal resize breaks layouts.
+
+**Sheet** — Same surface treatment as Dialog (canvas bg, `xl` radius on the floating edge, `shadow-lg`, shared overlay). 400px wide from left or right. Use for editing flows that need more room than a Dialog; never for confirmations.
+
+**Popover / HoverCard** — Same visual recipe (canvas, hairline border, `lg` radius, `shadow-md`, 320px max). The difference is the trigger: Popover opens on click and can contain interactive controls; HoverCard opens on hover (300ms delay) and is read-only. Never put a button inside a HoverCard.
+
+**Command palette** — The highest-elevation surface (`shadow-xl`), 560px max. Input row is 44px — taller than a standard Input to signal it's the primary act on this surface. Items follow the select-item pattern: `primary-subtle` background + `primary` text when active. Always show a `<Kbd>` hint for the shortcut that opened it.
+
+**Slider** — Track matches Progress (6px, `--surface-2`, pill). Thumb is a 16px canvas circle with `hairline-strong` border and `shadow-sm` — the one filled control that gets a shadow, because the thumb must read as grabbable.
+
+**Kbd** — Mono 13px on `--surface-1` with a 2px bottom border for key-cap depth. Use for every keyboard shortcut mention: menus, tooltips, command items. Chords render as separate Kbds, not one wide one.
+
+**Note** — Persistent inline guidance. Neutral surface (`--surface-1` + hairline), never status-tinted backgrounds — that's Alert's job. Only the optional icon takes a status color.
+
+**CodeBlock / InlineCode** — Block code on `--surface-1` with hairline border and copy button; inline code on `--surface-2` with `sm` radius. Both always mono. Never style inline code with backticks-as-text.
+
+**StatusDot** — Never appears without a text label within the same flex row. `pulse` is reserved for genuinely live states (deploying, recording, online) — a static "active" status gets a static dot.
+
+**Separator** — 1px `--hairline`, full width or height. Use between list sections and toolbar groups; don't stack a Separator against a bordered element (double line).
 
 ---
 

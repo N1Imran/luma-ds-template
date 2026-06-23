@@ -2,6 +2,8 @@
 
 An AI-readable design system specification. Luma answers one question: what does it take for an AI coding tool to generate UI that is already on-brand, with no style cleanup and no back-and-forth?
 
+> Built to be read by machines as well as people. See [MACHINE-READABLE.md](MACHINE-READABLE.md) for how the token, rules, and component layers let AI tools and registries consume Luma — DTCG [`tokens.json`](tokens.json), a JSON [`registry.json`](registry.json), and an [`llms.txt`](llms.txt) index.
+
 **Luma is a portfolio project, not an open-source template.** You are welcome to clone it and test it with your AI tools. It is not licensed for reuse in your own products. See [License](#license).
 
 **Target stack:** React · TypeScript · Radix UI · Tailwind CSS v4 · OKLCH color science

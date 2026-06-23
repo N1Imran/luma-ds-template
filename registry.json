@@ -1,0 +1,550 @@
+{
+  "$schema": "https://luma.imran.fi/registry.schema.json",
+  "name": "luma-ui",
+  "version": "1.3.0",
+  "description": "Machine-readable component manifest for the Luma Design System. Each entry packages a component's variants, sizes, states, token bindings, rules, and example usage so an AI tool can build on-brand UI without parsing source files. JSON is used (not Markdown) because it is ~80% more token-efficient for this payload and removes ambiguity for agents.",
+  "status": "specification",
+  "installable": false,
+  "note": "This is the specification layer. Component source (React/TypeScript), Storybook examples, and the Figma library live in a separate private implementation repo. The `import` field on each component reflects the intended package API, not code shipped in this repo. Treat this manifest as authoritative for component shape, tokens, and rules — not as an installable registry.",
+  "implementationRepo": "https://github.com/N1Imran/luma-ui (private)",
+  "tokenSource": "tokens.json (foundation) + DESIGN.md components block (bindings)",
+  "stateModel": ["default", "hover", "focus", "pressed", "disabled"],
+  "license": "CC BY-NC-ND 4.0",
+  "author": "Muhammad Imran (https://imran.fi)",
+
+  "components": [
+    {
+      "name": "Button",
+      "category": "form",
+      "description": "Primary interactive control. Emphasis is a ladder, not a palette — one primary per surface.",
+      "import": "import { Button } from '@n1imran/luma-ui'",
+      "variants": ["default", "secondary", "outline", "ghost", "link", "destructive", "success", "warning", "info"],
+      "sizes": [
+        { "name": "sm", "height": "32px" },
+        { "name": "default", "height": "36px" },
+        { "name": "lg", "height": "40px" },
+        { "name": "icon", "height": "36px", "width": "36px" }
+      ],
+      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "tokens": ["color.primary", "color.on-primary", "color.surface-2", "color.destructive", "radius.md", "typography.body-sm-strong"],
+      "rules": [
+        "Filled variants (default, secondary, destructive, success, warning, info): NO shadow — the solid color is the affordance.",
+        "Outline gets shadow.xs; ghost and link are intentionally flat.",
+        "Warning uses color.on-warning (#111111, dark text) — amber + white fails WCAG AA.",
+        "Icon-only buttons require an aria-label.",
+        "All button icons are 20px at 2px stroke regardless of the size prop.",
+        "destructive is for irreversible actions only; always confirm via Dialog."
+      ],
+      "example": "<Button variant=\"default\">Save changes</Button>",
+      "specRef": "DESIGN.md#components"
+    },
+    {
+      "name": "IconButton",
+      "category": "form",
+      "description": "Square, icon-only action. Same heights as Button.",
+      "import": "import { IconButton } from '@n1imran/luma-ui'",
+      "sizes": [{ "name": "sm" }, { "name": "default" }, { "name": "lg" }],
+      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "tokens": ["color.surface-2", "color.ink", "radius.md"],
+      "rules": ["Always requires aria-label.", "Icon is 20px at 2px stroke."],
+      "example": "<IconButton aria-label=\"Settings\"><Icon name=\"Settings\" /></IconButton>"
+    },
+    {
+      "name": "Input",
+      "category": "form",
+      "description": "Single-line text field. 36px height to match Button.",
+      "import": "import { Input } from '@n1imran/luma-ui'",
+      "states": ["default", "focus", "error", "disabled"],
+      "height": "36px",
+      "tokens": ["color.surface-2", "color.ink", "color.ink-subtle", "color.hairline", "color.primary", "color.error", "radius.md"],
+      "rules": [
+        "Always pair with a visible Label — placeholder is a hint, never the only label.",
+        "Error state uses the color.error ring (not color.destructive).",
+        "Never change border-width on error — use a ring to avoid layout shift."
+      ],
+      "example": "<><Label htmlFor=\"email\">Email</Label><Input id=\"email\" placeholder=\"you@example.com\" /></>"
+    },
+    {
+      "name": "Textarea",
+      "category": "form",
+      "description": "Multi-line text field. Mirrors Input states.",
+      "import": "import { Textarea } from '@n1imran/luma-ui'",
+      "states": ["default", "focus", "error", "disabled"],
+      "tokens": ["color.surface-2", "color.ink", "color.hairline", "color.primary", "radius.md"],
+      "rules": ["Min-height 72px (three lines of body-sm).", "Resize vertical only — horizontal resize breaks layouts."],
+      "example": "<Textarea placeholder=\"Add a description…\" />"
+    },
+    {
+      "name": "Label",
+      "category": "form",
+      "description": "Form field label. body-sm-strong.",
+      "import": "import { Label } from '@n1imran/luma-ui'",
+      "tokens": ["typography.body-sm-strong", "color.ink"],
+      "example": "<Label htmlFor=\"name\">Full name</Label>"
+    },
+    {
+      "name": "Checkbox",
+      "category": "form",
+      "description": "Binary choice submitted with a form, or multiple independent choices in a group.",
+      "import": "import { Checkbox } from '@n1imran/luma-ui'",
+      "states": ["default", "checked", "indeterminate", "disabled"],
+      "tokens": ["color.primary", "color.on-primary", "color.hairline-strong", "radius.sm"],
+      "rules": ["16×16px.", "4px radius (not pill).", "Checked uses color.primary; disabled at 50% opacity."],
+      "example": "<Checkbox id=\"terms\" /> <Label htmlFor=\"terms\">I agree</Label>"
+    },
+    {
+      "name": "RadioGroup",
+      "category": "form",
+      "description": "Choose one of 2–5 options where seeing all at once aids the decision.",
+      "import": "import { RadioGroup, RadioGroupItem } from '@n1imran/luma-ui'",
+      "states": ["default", "checked", "disabled"],
+      "tokens": ["color.primary", "color.hairline-strong", "radius.pill"],
+      "rules": ["16×16px, pill radius.", "Checked uses color.primary."],
+      "example": "<RadioGroup defaultValue=\"a\"><RadioGroupItem value=\"a\" /></RadioGroup>"
+    },
+    {
+      "name": "Select",
+      "category": "form",
+      "description": "Compact single-choice for up to 6 options.",
+      "import": "import { Select } from '@n1imran/luma-ui'",
+      "states": ["trigger", "open", "disabled", "item", "item-active", "item-disabled"],
+      "height": "36px",
+      "tokens": ["color.surface-2", "color.ink", "color.hairline", "color.primary-subtle", "color.primary", "radius.md", "shadow.md"],
+      "rules": ["Trigger height matches Input (36px).", "Menu uses shadow.md — above page, below Dialog.", "Use for ≤6 options; use Combobox for ≥7."],
+      "example": "<Select><SelectTrigger><SelectValue placeholder=\"Role…\" /></SelectTrigger></Select>"
+    },
+    {
+      "name": "Combobox",
+      "category": "form",
+      "description": "Searchable single-choice for 7+ options, or when users know what they're typing.",
+      "import": "import { Combobox } from '@n1imran/luma-ui'",
+      "states": ["trigger", "search", "menu"],
+      "height": "36px",
+      "tokens": ["color.surface-2", "color.ink", "color.hairline", "color.primary-subtle", "radius.md", "shadow.md"],
+      "rules": ["Adds a search input above the option list.", "Prefer Select for ≤6 options."],
+      "example": "<Combobox options={roles} value={role} onChange={setRole} placeholder=\"Select role…\" />"
+    },
+    {
+      "name": "Switch",
+      "category": "form",
+      "description": "Binary setting that applies instantly, no Save button.",
+      "import": "import { Switch } from '@n1imran/luma-ui'",
+      "states": ["off", "on", "disabled"],
+      "tokens": ["color.primary", "color.surface-active", "color.canvas", "radius.pill"],
+      "rules": ["36×20px track, 16×16px thumb.", "Off uses color.surface-active (neutral grey), not red — red implies error."],
+      "example": "<Switch checked={enabled} onCheckedChange={setEnabled} />"
+    },
+    {
+      "name": "Slider",
+      "category": "form",
+      "description": "Pick a value along a range.",
+      "import": "import { Slider } from '@n1imran/luma-ui'",
+      "states": ["track", "fill", "thumb", "thumb-focus"],
+      "tokens": ["color.surface-2", "color.primary", "color.canvas", "color.hairline-strong", "shadow.sm", "radius.pill"],
+      "rules": ["Track is 6px, surface-2, pill.", "Thumb is a 16px canvas circle with hairline-strong border + shadow.sm — the one filled control that gets a shadow."],
+      "example": "<Slider defaultValue={[50]} max={100} />"
+    },
+    {
+      "name": "Toggle",
+      "category": "form",
+      "description": "Two-state pressed/unpressed control.",
+      "import": "import { Toggle, ToggleGroup } from '@n1imran/luma-ui'",
+      "states": ["default", "pressed", "disabled"],
+      "tokens": ["color.surface-2", "color.surface-active", "radius.md"],
+      "rules": ["In a ToggleGroup segmented control, items sit flush (itemSpacing 0)."],
+      "example": "<ToggleGroup type=\"single\"><Toggle value=\"bold\">B</Toggle></ToggleGroup>"
+    },
+    {
+      "name": "Form",
+      "category": "form",
+      "description": "Composition wrapper — label, helper text, and error message slots. Built on react-hook-form + Zod.",
+      "import": "import { Form, FormField, FormLabel, FormHelper, FormErrorMessage } from '@n1imran/luma-ui'",
+      "tokens": ["typography.body-sm-strong", "typography.caption", "color.ink-muted", "color.error-text"],
+      "rules": ["Helper text uses caption + ink-muted.", "Error message uses error-text, replaces helper on validation failure."],
+      "example": "<Form>{/* FormField → FormLabel → control → FormHelper / FormErrorMessage */}</Form>"
+    },
+
+    {
+      "name": "Dialog",
+      "category": "overlay",
+      "description": "Blocking decision or confirmation the user must answer. Built on Radix.",
+      "import": "import { Dialog } from '@n1imran/luma-ui'",
+      "tokens": ["color.canvas", "color.overlay-bg", "radius.xl", "shadow.lg", "zIndex.modal"],
+      "rules": ["Use for confirmations — never a Toast.", "Use Sheet for long forms.", "Radix handles focus trap, escape, ARIA."],
+      "example": "<Dialog><DialogTrigger /><DialogContent>…</DialogContent></Dialog>"
+    },
+    {
+      "name": "Sheet",
+      "category": "overlay",
+      "description": "Complex editing or detail view that keeps page context.",
+      "import": "import { Sheet } from '@n1imran/luma-ui'",
+      "tokens": ["color.canvas", "color.overlay-bg", "radius.xl", "shadow.lg", "zIndex.modal"],
+      "rules": ["400px wide from left or right.", "Use for editing flows needing more room than a Dialog; never for confirmations."],
+      "example": "<Sheet><SheetTrigger /><SheetContent side=\"right\">…</SheetContent></Sheet>"
+    },
+    {
+      "name": "Popover",
+      "category": "overlay",
+      "description": "Small contextual content anchored to a trigger, opens on click, can contain interactive controls.",
+      "import": "import { Popover } from '@n1imran/luma-ui'",
+      "tokens": ["color.canvas", "color.hairline", "radius.lg", "shadow.md", "zIndex.dropdown"],
+      "rules": ["320px max.", "Opens on click; for read-only hover content use HoverCard."],
+      "example": "<Popover><PopoverTrigger /><PopoverContent>…</PopoverContent></Popover>"
+    },
+    {
+      "name": "HoverCard",
+      "category": "overlay",
+      "description": "Read-only preview shown on hover (300ms delay).",
+      "import": "import { HoverCard } from '@n1imran/luma-ui'",
+      "tokens": ["color.canvas", "color.hairline", "radius.lg", "shadow.md", "zIndex.dropdown"],
+      "rules": ["Same recipe as Popover.", "Never put a button or interactive control inside a HoverCard."],
+      "example": "<HoverCard><HoverCardTrigger /><HoverCardContent>…</HoverCardContent></HoverCard>"
+    },
+    {
+      "name": "DropdownMenu",
+      "category": "overlay",
+      "description": "A list of actions on an element.",
+      "import": "import { DropdownMenu } from '@n1imran/luma-ui'",
+      "states": ["item", "item-hover", "item-destructive", "item-destructive-hover", "separator"],
+      "tokens": ["color.canvas", "color.surface-hover", "color.destructive", "radius.lg", "shadow.md", "zIndex.dropdown"],
+      "rules": ["Use for action lists — never a Popover with hand-rolled buttons.", "Destructive items use destructive text + tinted hover."],
+      "example": "<DropdownMenu><DropdownMenuTrigger /><DropdownMenuContent>…</DropdownMenuContent></DropdownMenu>"
+    },
+    {
+      "name": "Tooltip",
+      "category": "overlay",
+      "description": "Label or hint on hover, no interaction inside.",
+      "import": "import { Tooltip } from '@n1imran/luma-ui'",
+      "tokens": ["color.inverse-canvas", "color.inverse-ink", "radius.sm", "zIndex.tooltip"],
+      "rules": ["Never place interactive content in a Tooltip.", "Highest z-index (600) — always topmost."],
+      "example": "<Tooltip><TooltipTrigger /><TooltipContent>Copy link</TooltipContent></Tooltip>"
+    },
+    {
+      "name": "Command",
+      "category": "overlay",
+      "description": "Command palette — searchable action list. Highest-elevation surface.",
+      "import": "import { Command } from '@n1imran/luma-ui'",
+      "states": ["input", "item", "item-active"],
+      "tokens": ["color.canvas", "color.primary-subtle", "color.primary", "radius.xl", "shadow.xl", "zIndex.modal"],
+      "rules": ["560px max, input row 44px (taller than standard Input).", "Active items use primary-subtle bg + primary text.", "Always show a Kbd hint for the opening shortcut."],
+      "example": "<Command><CommandInput placeholder=\"Type a command…\" /><CommandList>…</CommandList></Command>"
+    },
+
+    {
+      "name": "Tabs",
+      "category": "navigation",
+      "description": "Segmented switch between sibling views. Pill-tabs pattern.",
+      "import": "import { Tabs } from '@n1imran/luma-ui'",
+      "states": ["list", "trigger", "trigger-active", "trigger-disabled"],
+      "tokens": ["color.surface-2", "color.canvas", "color.ink", "radius.md", "shadow.xs"],
+      "rules": ["List has subtle surface-2 bg + 4px inner padding.", "Active trigger gets canvas bg + shadow.xs.", "Items sit flush (itemSpacing 0) — avoid underline tabs for product UI."],
+      "example": "<Tabs defaultValue=\"overview\"><TabsList><TabsTrigger value=\"overview\">Overview</TabsTrigger></TabsList></Tabs>"
+    },
+    {
+      "name": "Accordion",
+      "category": "navigation",
+      "description": "Collapsible stacked sections.",
+      "import": "import { Accordion } from '@n1imran/luma-ui'",
+      "states": ["item", "trigger", "trigger-open", "content"],
+      "tokens": ["color.ink", "color.primary", "color.hairline", "radius.lg"],
+      "rules": ["Triggers are <button> elements (Radix).", "Open state tints the trigger to color.primary.", "Content collapses top padding to zero."],
+      "example": "<Accordion type=\"single\" collapsible><AccordionItem value=\"a\">…</AccordionItem></Accordion>"
+    },
+    {
+      "name": "Breadcrumb",
+      "category": "navigation",
+      "description": "Hierarchical path navigation.",
+      "import": "import { Breadcrumb } from '@n1imran/luma-ui'",
+      "states": ["item", "item-current", "separator"],
+      "tokens": ["color.ink-muted", "color.ink", "typography.body-sm"],
+      "rules": ["Current item uses ink (not ink-muted) and aria-current."],
+      "example": "<Breadcrumb><BreadcrumbItem>Home</BreadcrumbItem></Breadcrumb>"
+    },
+    {
+      "name": "Pagination",
+      "category": "navigation",
+      "description": "Page-by-page navigation through a list.",
+      "import": "import { Pagination } from '@n1imran/luma-ui'",
+      "states": ["item", "item-active", "item-disabled"],
+      "tokens": ["color.surface-2", "color.primary", "color.primary-subtle", "radius.md"],
+      "rules": ["Active page uses primary-subtle bg + primary text."],
+      "example": "<Pagination total={120} pageSize={20} page={page} onChange={setPage} />"
+    },
+    {
+      "name": "NavItem",
+      "category": "navigation",
+      "description": "Sidebar / nav list item.",
+      "import": "import { NavItem } from '@n1imran/luma-ui'",
+      "states": ["default", "hover", "active"],
+      "tokens": ["color.ink-muted", "color.surface-hover", "color.primary-subtle", "color.primary", "radius.md"],
+      "rules": ["Active item uses primary-subtle bg + primary text.", "Sidebar nav icons are 16px."],
+      "example": "<NavItem icon=\"Inbox\" active>Inbox</NavItem>"
+    },
+
+    {
+      "name": "Badge",
+      "category": "display",
+      "description": "Count or category on an item in lists and tables.",
+      "import": "import { Badge } from '@n1imran/luma-ui'",
+      "variants": ["default", "success", "error", "warning", "info"],
+      "tokens": ["color.primary-muted", "color.primary", "color.success-bg", "color.success-text", "radius.pill"],
+      "rules": ["Badge icons are 12px.", "Use status variants only for status — not decoration."],
+      "example": "<Badge variant=\"success\">Published</Badge>"
+    },
+    {
+      "name": "Avatar",
+      "category": "display",
+      "description": "User or entity image with initials fallback.",
+      "import": "import { Avatar } from '@n1imran/luma-ui'",
+      "sizes": [{ "name": "sm" }, { "name": "md" }, { "name": "lg" }],
+      "tokens": ["color.primary-subtle", "color.primary", "color.canvas", "radius.pill"],
+      "rules": ["Always pill radius.", "Fallback uses primary-subtle bg + primary text.", "2px solid canvas border separates avatars in groups."],
+      "example": "<Avatar src={url} fallback=\"MI\" size=\"md\" />"
+    },
+    {
+      "name": "Card",
+      "category": "display",
+      "description": "Content container. Never nest cards.",
+      "import": "import { Card } from '@n1imran/luma-ui'",
+      "variants": ["default", "elevated"],
+      "tokens": ["color.canvas", "color.ink", "color.ink-muted", "color.hairline", "radius.xl", "shadow.sm"],
+      "rules": ["rounded-xl (12px), border, canvas bg.", "Elevated adds shadow.sm.", "Descriptions use ink-muted."],
+      "example": "<Card className=\"p-6\">…</Card>"
+    },
+    {
+      "name": "Alert",
+      "category": "display",
+      "description": "Persistent, status-colored condition of a page or section.",
+      "import": "import { Alert } from '@n1imran/luma-ui'",
+      "variants": ["info", "success", "warning", "error"],
+      "tokens": ["color.info-bg", "color.info-border", "color.info-text", "color.info", "radius.lg"],
+      "rules": ["Use the status color's bg/border/text triple — never mix tokens across status groups.", "Icon uses the solid status color (e.g. color.success, not color.success-text)."],
+      "example": "<Alert variant=\"warning\" title=\"Heads up\">Your trial ends soon.</Alert>"
+    },
+    {
+      "name": "Progress",
+      "category": "display",
+      "description": "Determinate long-running operation.",
+      "import": "import { Progress } from '@n1imran/luma-ui'",
+      "variants": ["default", "success", "warning", "error"],
+      "tokens": ["color.surface-2", "color.primary", "color.success", "color.warning", "color.error", "radius.pill"],
+      "rules": ["Track is surface-2, fill defaults to primary.", "Status variants use their solid colors, not the bg/border/text tokens."],
+      "example": "<Progress value={64} />"
+    },
+    {
+      "name": "Skeleton",
+      "category": "display",
+      "description": "Passive loading placeholder for page or section content.",
+      "import": "import { Skeleton } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-2", "radius.md"],
+      "rules": ["Use for passive page loads; use Spinner for active waiting after an action."],
+      "example": "<Skeleton className=\"h-4 w-32\" />"
+    },
+    {
+      "name": "Separator",
+      "category": "display",
+      "description": "1px divider between sections.",
+      "import": "import { Separator } from '@n1imran/luma-ui'",
+      "tokens": ["color.hairline"],
+      "rules": ["Full width or height.", "Don't stack against a bordered element (double line)."],
+      "example": "<Separator />"
+    },
+    {
+      "name": "Table",
+      "category": "display",
+      "description": "Tabular data.",
+      "import": "import { Table } from '@n1imran/luma-ui'",
+      "states": ["header", "row", "row-hover", "row-selected", "row-zebra"],
+      "tokens": ["color.surface-1", "color.ink-muted", "color.surface-hover", "color.primary-subtle", "color.hairline", "typography.eyebrow"],
+      "rules": ["Column headers use the eyebrow (uppercase) type role.", "Selected rows use primary-subtle."],
+      "example": "<Table><TableHeader>…</TableHeader><TableBody>…</TableBody></Table>"
+    },
+    {
+      "name": "Panel",
+      "category": "display",
+      "description": "Flat bordered region for grouping content without elevation.",
+      "import": "import { Panel } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-1", "color.hairline", "radius.xl"],
+      "example": "<Panel>…</Panel>"
+    },
+    {
+      "name": "Chip",
+      "category": "display",
+      "description": "Removable filter or input value.",
+      "import": "import { Chip } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-2", "color.ink", "color.hairline", "radius.pill"],
+      "rules": ["Includes a remove affordance (×).", "Use for active filters and multi-value inputs."],
+      "example": "<Chip onRemove={fn}>Design</Chip>"
+    },
+
+    {
+      "name": "Toast",
+      "category": "feedback",
+      "description": "Transient result of an action just performed. Use Sonner for stacking/dismiss.",
+      "import": "import { Sonner, toast } from '@n1imran/luma-ui'",
+      "tokens": ["color.canvas", "color.hairline", "radius.lg", "shadow.lg", "zIndex.toast"],
+      "rules": ["Max-width 360px.", "Always above Dialog (z 500 > 400).", "Use Sonner not a custom Toast for most cases.", "Never use a Toast for confirmations."],
+      "example": "toast.success('Saved')"
+    },
+    {
+      "name": "Spinner",
+      "category": "feedback",
+      "description": "Active waiting after a user action (submit, fetch in flight).",
+      "import": "import { Spinner } from '@n1imran/luma-ui'",
+      "sizes": [{ "name": "sm" }, { "name": "default" }, { "name": "lg" }],
+      "tokens": ["color.hairline", "color.primary"],
+      "rules": ["For passive page loads use Skeleton instead."],
+      "example": "<Spinner size=\"sm\" />"
+    },
+    {
+      "name": "StatusDot",
+      "category": "feedback",
+      "description": "Live presence or system state, always paired with a label.",
+      "import": "import { StatusDot } from '@n1imran/luma-ui'",
+      "variants": ["success", "warning", "error", "info", "neutral"],
+      "tokens": ["color.success", "color.warning", "color.error", "color.info", "radius.pill"],
+      "rules": ["Never appears without a text label in the same flex row.", "pulse is reserved for genuinely live states (deploying, recording, online)."],
+      "example": "<StatusDot variant=\"success\" pulse /> <Text variant=\"body-sm\">Online</Text>"
+    },
+    {
+      "name": "EmptyState",
+      "category": "feedback",
+      "description": "Placeholder when there is nothing to display yet.",
+      "import": "import { EmptyState } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-2", "color.ink", "color.ink-muted", "typography.body-sm-strong", "typography.body-sm"],
+      "rules": ["Icon at 48px on a surface-2 rounded background.", "Title in body-sm-strong, description in body-sm tone muted.", "Composable: Icon → Title → Description → Actions."],
+      "example": "<EmptyState bordered><EmptyStateIcon><Icon name=\"Inbox\" /></EmptyStateIcon><EmptyStateTitle>No notifications</EmptyStateTitle></EmptyState>"
+    },
+
+    {
+      "name": "Note",
+      "category": "content",
+      "description": "Persistent inline tip or guidance, quieter than Alert.",
+      "import": "import { Note } from '@n1imran/luma-ui'",
+      "variants": ["tip", "info", "warning", "deprecation"],
+      "tokens": ["color.surface-1", "color.hairline", "color.ink", "radius.lg"],
+      "rules": ["Neutral surface (surface-1 + hairline), never status-tinted backgrounds — that's Alert's job.", "Only the optional icon takes a status color."],
+      "example": "<Note variant=\"tip\" icon title=\"Pro tip\">Press <Kbd>⌘K</Kbd> to open the palette.</Note>"
+    },
+    {
+      "name": "CodeBlock",
+      "category": "content",
+      "description": "Display a block code sample with optional header + copy.",
+      "import": "import { CodeBlock } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-1", "color.hairline", "typography.mono", "radius.lg"],
+      "rules": ["surface-1 bg with hairline border and copy button.", "Always mono."],
+      "example": "<CodeBlock language=\"tsx\" copyable>{`<Button>Save</Button>`}</CodeBlock>"
+    },
+    {
+      "name": "InlineCode",
+      "category": "content",
+      "description": "Inline code span.",
+      "import": "import { InlineCode } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-2", "typography.mono", "radius.sm"],
+      "rules": ["surface-2 bg with sm radius.", "Always mono. Never style backticks-as-text."],
+      "example": "<InlineCode>cn()</InlineCode>"
+    },
+    {
+      "name": "Kbd",
+      "category": "content",
+      "description": "Render a keyboard shortcut. Chords use KbdGroup.",
+      "import": "import { Kbd, KbdGroup } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-1", "color.ink", "color.hairline", "typography.mono", "radius.sm"],
+      "rules": ["Mono 13px on surface-1 with a 2px bottom border for key-cap depth.", "Chords render as separate Kbds."],
+      "example": "<KbdGroup><Kbd>⌘</Kbd><Kbd>K</Kbd></KbdGroup>"
+    },
+    {
+      "name": "Link",
+      "category": "content",
+      "description": "Inline text navigation.",
+      "import": "import { Link } from '@n1imran/luma-ui'",
+      "states": ["default", "hover"],
+      "tokens": ["color.primary", "color.primary-pressed"],
+      "example": "<Link href=\"/docs\">Read the docs</Link>"
+    },
+
+    {
+      "name": "Text",
+      "category": "typography",
+      "description": "Typography primitive binding text to the 10 semantic roles. Reach for this before raw text classes.",
+      "import": "import { Text } from '@n1imran/luma-ui'",
+      "props": {
+        "variant": ["display", "heading", "title", "subtitle", "body-lg", "body-md", "body-sm", "body-sm-strong", "caption", "label", "eyebrow", "mono"],
+        "tone": ["default", "muted", "primary", "destructive", "success", "warning", "info", "inherit"],
+        "as": "any HTML element",
+        "align": ["left", "center", "right", "justify"],
+        "truncate": "boolean"
+      },
+      "tokens": ["typography.*", "color.ink", "color.ink-muted", "color.primary"],
+      "example": "<Text variant=\"display\" as=\"h1\">Welcome to Luma</Text>"
+    },
+
+    {
+      "name": "Container",
+      "category": "layout",
+      "description": "Page-width centred wrapper.",
+      "import": "import { Container } from '@n1imran/luma-ui'",
+      "props": { "size": ["xs", "sm", "md", "lg", "xl"], "pad": ["sm", "md", "lg", "xl"] },
+      "tokens": ["space.*"],
+      "example": "<Container size=\"xl\" pad=\"md\">…</Container>"
+    },
+    {
+      "name": "Stack",
+      "category": "layout",
+      "description": "Vertical layout (forms, lists, panels).",
+      "import": "import { Stack } from '@n1imran/luma-ui'",
+      "props": { "gap": ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"], "align": [], "justify": [], "divide": "boolean" },
+      "tokens": ["space.*"],
+      "example": "<Stack gap=\"lg\">…</Stack>"
+    },
+    {
+      "name": "Inline",
+      "category": "layout",
+      "description": "Horizontal layout (button rows, toolbars, chip lists).",
+      "import": "import { Inline } from '@n1imran/luma-ui'",
+      "props": { "gap": ["xs", "sm", "md", "lg", "xl"], "align": [], "justify": [], "wrap": "boolean" },
+      "tokens": ["space.*"],
+      "example": "<Inline gap=\"sm\" justify=\"end\"><Button variant=\"ghost\">Cancel</Button><Button>Save</Button></Inline>"
+    },
+    {
+      "name": "Grid",
+      "category": "layout",
+      "description": "CSS Grid (cards, dashboards).",
+      "import": "import { Grid } from '@n1imran/luma-ui'",
+      "props": { "cols": "number", "gap": ["xs", "sm", "md", "lg", "xl"], "align": [] },
+      "tokens": ["space.*"],
+      "example": "<Grid cols={3} gap=\"md\">…</Grid>"
+    },
+
+    {
+      "name": "Icon",
+      "category": "utility",
+      "description": "Lucide icon wrapper. 1,500+ icons, stroke scales with size.",
+      "import": "import { Icon } from '@n1imran/luma-ui'",
+      "sizes": [
+        { "name": "xs", "size": "12px", "stroke": "1px" },
+        { "name": "sm", "size": "16px", "stroke": "1px" },
+        { "name": "default", "size": "20px", "stroke": "2px" },
+        { "name": "lg", "size": "24px", "stroke": "2px" }
+      ],
+      "rules": ["Under 20px → 1px stroke; 20px and up → 2px stroke.", "Inherits color from parent currentColor — never set icon color directly."],
+      "example": "<Icon name=\"Search\" size=\"sm\" />"
+    },
+    {
+      "name": "ScrollArea",
+      "category": "utility",
+      "description": "Styled scroll container with custom scrollbars.",
+      "import": "import { ScrollArea } from '@n1imran/luma-ui'",
+      "tokens": ["color.surface-active", "radius.pill"],
+      "example": "<ScrollArea className=\"h-72\">…</ScrollArea>"
+    },
+    {
+      "name": "Collapsible",
+      "category": "utility",
+      "description": "Show/hide a single region of content.",
+      "import": "import { Collapsible } from '@n1imran/luma-ui'",
+      "tokens": ["duration.normal"],
+      "example": "<Collapsible><CollapsibleTrigger /><CollapsibleContent>…</CollapsibleContent></Collapsible>"
+    }
+  ]
+}

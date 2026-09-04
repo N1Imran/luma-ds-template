@@ -2,7 +2,7 @@
 
 An AI-readable design system specification. Luma answers one question: what does it take for an AI coding tool to generate UI that is already on-brand, with no style cleanup and no back-and-forth?
 
-> Built to be read by machines as well as people. See [MACHINE-READABLE.md](MACHINE-READABLE.md) for how the token, rules, and component layers let AI tools and registries consume Luma — DTCG [`tokens.json`](tokens.json), a JSON [`registry.json`](registry.json), and an [`llms.txt`](llms.txt) index.
+> Built to be read by machines as well as people. See [MACHINE-READABLE.md](MACHINE-READABLE.md) for how the token, rules, and component layers let AI tools and registries consume Luma: DTCG [`tokens.json`](tokens.json), a JSON [`registry.json`](registry.json), and an [`llms.txt`](llms.txt) index.
 
 **Luma is a portfolio project, not an open-source template.** You are welcome to clone it and test it with your AI tools. It is not licensed for reuse in your own products. See [License](#license).
 
@@ -14,11 +14,27 @@ An AI-readable design system specification. Luma answers one question: what does
 
 Most design systems are documented for humans. Luma is documented for AI tools first. The repo is the documentation layer of the system, and it does the heavy lifting through three files:
 
-**`DESIGN.md`** — the canonical brand spec, written in the DESIGN.md format that Google Stitch introduced and that Claude Code, Cursor, and Windsurf read natively. Machine-readable tokens live in the YAML front matter; the reasoning behind every decision lives in the prose. Colors, typography, spacing, elevation, shapes, 45+ component specs with states, decision tables for picking between overlapping components, accessibility rules, and explicit guardrails for agents.
+**`DESIGN.md`**: the canonical brand spec, written in the DESIGN.md format that Google Stitch introduced and that Claude Code, Cursor, and Windsurf read natively. Machine-readable tokens live in the YAML front matter; the reasoning behind every decision lives in the prose. Colors, typography, spacing, elevation, shapes, 52 component specs with states, decision tables for picking between overlapping components, accessibility rules, and explicit guardrails for agents.
 
-**`CLAUDE.md`** — the engineering constitution. Claude Code reads it automatically at the start of every session: the three-layer token architecture, component patterns, dark mode rules, iconography, and Figma conventions.
+**`CLAUDE.md`**: the engineering constitution. Claude Code reads it automatically at the start of every session: the three-layer token architecture, component patterns, dark mode rules, iconography, and Figma conventions.
 
-**`AGENTS.md`** — the entry point for every other agent (Cursor, Codex, Gemini CLI), pointing to the two files above.
+**`AGENTS.md`**: the entry point for every other agent (Cursor, Codex, Gemini CLI), pointing to the two files above.
+
+---
+
+## The spec proves its own claims
+
+A design spec that states a contrast ratio, an OKLCH coordinate, or a component count is making a claim nothing can check. A stale number reads exactly like a live one, so the drift stays invisible until someone ships against it.
+
+Luma computes those numbers instead of writing them:
+
+```bash
+node scripts/check.mjs
+```
+
+It asserts that every color in the JSON exports matches `DESIGN.md`, that every text pair meets the contrast the spec claims for it, that every published OKLCH coordinate still matches its hex, that every component in the registry has a spec, and that the version and component counts agree across every file. It exits non-zero on drift.
+
+Version 1.4.0 is what happened the first time these ran: two solid button fills were failing WCAG AA, every published contrast ratio was wrong, and not one of the eleven OKLCH coordinates in the primary scale matched the hex beside it. See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

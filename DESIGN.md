@@ -1,31 +1,31 @@
 ---
-version: "1.3.0"
+version: "1.4.0"
 name: Luma
 description: |
   Luma is a light-first, product-software design system built on OKLCH color science and a Geist-inspired
-  typographic scale. The canvas is pure white, cut through by a single electric blue accent (hue 254) that
-  carries every primary CTA, focus ring, and selected state — never used decoratively. Surfaces step through
+  typographic scale. The canvas is pure white, cut through by a single electric blue accent (hue 258) that
+  carries every primary CTA, focus ring, and selected state. Never used decoratively. Surfaces step through
   a Geist-style lift ladder (canvas → subtle → element) rather than relying on shadow alone; in dark mode
   the ladder reverses so panels grow brighter as they elevate, following the Linear/Supabase convention.
   The dark-mode neutral ladder is OKLCH-derived with five discrete stops (--luma-neutral-700 through -950)
-  including two extra stops (-750, -850) for popover and recessed surfaces — finer-grained granularity at
+  including two extra stops (-750, -850) for popover and recessed surfaces. Finer-grained granularity at
   the dark end so layered surfaces stay perceptually distinct.
   Typography is set in Geist (Inter fallback) at a dense product-software cadence: display headlines carry
   −0.05em tracking, body text stays at 0, and column headers use a 0.08em uppercase eyebrow pattern.
-  Component density sits at the Linear end of the spectrum — 36px default controls, 6px radius throughout,
+  Component density sits at the Linear end of the spectrum: 36px default controls, 6px radius throughout,
   12–16px internal padding. Dark mode is a first-class citizen: all semantic aliases swap in a single
   .dark {} block, surfaces alias to the OKLCH neutral scale (never raw oklch() literals), and shadows in
   dark add a white hairline ring for edge definition on deep canvases.
 
 colors:
-  # ── Canvas & surfaces — light mode ────────────────────────────────────────
+  # ── Canvas & surfaces: light mode ────────────────────────────────────────
   canvas:          "#ffffff"
-  surface-1:       "#f9f9fb"        # subtle — sidebars, recessed sections
+  surface-1:       "#f9f9fb"        # subtle: sidebars, recessed sections
   surface-2:       "#f2f2f5"        # UI element default background
   surface-hover:   "#e8e8ed"        # UI element hover
   surface-active:  "#d5d5dc"        # UI element pressed / selected
 
-  # ── Canvas & surfaces — dark mode ─────────────────────────────────────────
+  # ── Canvas & surfaces: dark mode ─────────────────────────────────────────
   # OKLCH-derived neutral ladder. Each step is a discrete stop on the
   # --luma-neutral-* scale (hue 250, cool-tinted). Page → card → popover
   # gives ~7% perceptual luminance lift per step, so cards visibly elevate
@@ -43,47 +43,66 @@ colors:
   ink-subtle:   "#71717e"           # placeholders, tertiary (--fg-subtle)
   ink-disabled: "#a4a4b0"           # disabled controls (--fg-disabled)
 
-  # ── Hairlines — never reuse ink for borders ────────────────────────────────
+  # ── Hairlines. Never reuse ink for borders ────────────────────────────────
   hairline:        "#e8e8ed"        # default dividers and outlines
   hairline-strong: "#d5d5dc"        # emphasis borders, active state
   hairline-subtle: "#f2f2f5"        # faint separators
 
-  # ── Primary — electric blue hue 254 ───────────────────────────────────────
+  # ── Ink scale, dark mode ──────────────────────────────────────────────────
+  # Derived from the same hue-250 neutral axis as the dark surface ladder, with
+  # each stop solved to match its light-mode counterpart's contrast ratio against
+  # the canvas. Computed, not eyeballed. `node scripts/check-contrast.mjs` asserts
+  # every pair below and fails the build if a value drifts.
+  ink-dark:          "#f9feff"      # oklch(0.994 0.008 250) · 18.58:1 on canvas-dark
+  ink-body-dark:     "#f3f8fc"      # oklch(0.976 0.008 250) · 17.68:1
+  ink-muted-dark:    "#9da1a5"      # oklch(0.706 0.008 250) ·  7.27:1
+  ink-subtle-dark:   "#8f9397"      # oklch(0.660 0.008 250) ·  6.11:1 (see surface ceiling note)
+  ink-disabled-dark: "#505458"      # oklch(0.443 0.008 250) ·  2.47:1 · exempt, matches light
+
+  # ── Hairlines, dark mode ──────────────────────────────────────────────────
+  # Translucent white, never opaque grey: borders must read as an edge highlight
+  # on a deep canvas, and translucency keeps them correct on every surface in the
+  # ladder without a per-surface token.
+  hairline-dark:        "rgba(255,255,255,0.08)"   # default dividers and outlines
+  hairline-dark-strong: "rgba(255,255,255,0.14)"   # emphasis borders, active state
+  hairline-dark-subtle: "rgba(255,255,255,0.05)"   # faint separators
+
+  # ── Primary, electric blue hue 258 ───────────────────────────────────────
   # One accent. Reserved for: primary CTA, focus ring, active nav,
   # selected rows. Never used decoratively.
-  primary:          "#0060d4"       # light mode — brand-600 · oklch(0.46 0.24 254)
-  primary-hover:    "#1472e8"       # lighter — hover state
-  primary-pressed:  "#004fb8"       # darker — pressed / active
-  primary-disabled: "#8db8ef"       # desaturated — disabled CTA bg
+  primary:          "#0060d4"       # light mode, brand-600 · oklch(0.515 0.194 258)
+  primary-hover:    "#1472e8"       # lighter: hover state
+  primary-pressed:  "#004fb8"       # darker: pressed / active
+  primary-disabled: "#8db8ef"       # desaturated: disabled CTA bg
   primary-ring:     "rgba(0,96,212,0.30)"  # focus halo
   on-primary:       "#ffffff"       # text on primary background
   primary-subtle:   "#eef2ff"       # barely tinted surface (selected rows, active nav)
   primary-muted:    "#dce8ff"       # light tint (badges, active item highlights)
 
-  # Dark mode primary (brand-400 — lighter to read on dark canvas)
+  # Dark mode primary (brand-400: lighter to read on dark canvas)
   primary-dark:    "#5393f5"        # oklch(0.66 0.19 254)
   on-primary-dark: "#0f0f16"
 
   # ── Semantic status ────────────────────────────────────────────────────────
-  success:        "#169a45"         # vibrant green — hue 145
+  success:        "#008935"         # vibrant green: hue 148
   success-bg:     "#edfcf2"
   success-border: "#6ed49a"
   success-text:   "#155c2b"
   on-success:     "#ffffff"
 
-  warning:        "#f4ad0a"         # vibrant amber — hue 72
+  warning:        "#f4ad0a"         # vibrant amber: hue 79
   warning-bg:     "#fffbeb"
   warning-border: "#fcd35a"
   warning-text:   "#854d0e"
-  on-warning:     "#111111"         # amber is light — near-black text
+  on-warning:     "#111111"         # amber is light: near-black text
 
-  error:          "#e03131"         # vibrant red — hue 25
+  error:          "#e03131"         # vibrant red: hue 27
   error-bg:       "#fff0f0"
   error-border:   "#f5a0a0"
   error-text:     "#8b1b1b"
   on-error:       "#ffffff"
 
-  info:           "#3b7ef4"         # vivid blue — hue 240
+  info:           "#2f71e6"         # vivid blue: hue 261
   info-bg:        "#eff6ff"
   info-border:    "#93bbfc"
   info-text:      "#1d4db5"
@@ -100,11 +119,11 @@ colors:
   # ── Inverse & overlay ──────────────────────────────────────────────────────
   inverse-canvas: "#0a0a0a"         # dark panel on a light page
   inverse-ink:    "#f9f9fb"         # text on inverse canvas
-  overlay-bg:     "rgba(0,0,0,0.50)"  # shared backdrop — Dialog, Sheet, Drawer
+  overlay-bg:     "rgba(0,0,0,0.50)"  # shared backdrop: Dialog, Sheet, Drawer
                                     # dark mode: rgba(0,0,0,0.65)
 
 layout:
-  # Responsive grid — columns / gutter / margin change per breakpoint.
+  # Responsive grid: columns / gutter / margin change per breakpoint.
   # CSS custom properties in layout.css update via media queries.
   grid:
     xs:  { columns: 4,  gutter: "16px", margin: "16px",  use: "Mobile portrait" }
@@ -130,7 +149,7 @@ layout:
     2xl: "1536px"
 
   sidebar:
-    width:           "240px"        # expanded — matches shadcn sidebar default
+    width:           "240px"        # expanded: matches shadcn sidebar default
     collapsed-width: "52px"         # icon-only rail
 
   panel:
@@ -180,7 +199,7 @@ typography:
     letterSpacing: "0"
 
   body-sm:
-    # Regular weight — secondary content (table cells, timestamps, descriptions)
+    # Regular weight: secondary content (table cells, timestamps, descriptions)
     fontFamily: "Geist, Inter, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 400
@@ -188,7 +207,7 @@ typography:
     letterSpacing: "0"
 
   body-sm-strong:
-    # Medium weight — component default (Button, Badge, Input labels, nav items)
+    # Medium weight: component default (Button, Badge, Input labels, nav items)
     fontFamily: "Geist, Inter, system-ui, sans-serif"
     fontSize: "14px"
     fontWeight: 500
@@ -203,7 +222,7 @@ typography:
     letterSpacing: "0"
 
   label:
-    # Standard section label — wide tracking, no uppercase enforcement
+    # Standard section label: wide tracking, no uppercase enforcement
     fontFamily: "Geist, Inter, system-ui, sans-serif"
     fontSize: "12px"
     fontWeight: 500
@@ -211,7 +230,7 @@ typography:
     letterSpacing: "0.1em"
 
   eyebrow:
-    # Uppercase pattern — table column headers, eyebrow labels, category tags
+    # Uppercase pattern: table column headers, eyebrow labels, category tags
     fontFamily: "Geist, Inter, system-ui, sans-serif"
     fontSize: "12px"
     fontWeight: 500
@@ -231,7 +250,7 @@ rounded:
   none: "0"
   xs:   "2px"
   sm:   "4px"
-  md:   "6px"     # default — Button, Input, Badge, Select, Combobox, Checkbox
+  md:   "6px"     # default: Button, Input, Badge, Select, Combobox, Checkbox
   lg:   "8px"     # Alert, Note, dropdown menus, Skeleton, Toast
   xl:   "12px"    # Card, Dialog, Sheet
   2xl:  "16px"
@@ -381,7 +400,7 @@ components:
     ring: "{colors.primary-ring}"
 
   input-error:
-    # Uses --error, not --destructive — validation state, not destructive action
+    # Uses --error, not --destructive: validation state, not destructive action
     border: "1px solid {colors.error}"
     ring: "{colors.error}"
 
@@ -853,7 +872,7 @@ components:
     border: "1px solid {colors.hairline}"
     padding: "12px 16px"
     maxWidth: "360px"
-    shadow: "xl"     # higher than dialog's lg — signals it's above everything
+    shadow: "xl"     # higher than dialog's lg. Signals it's above everything
 
   # ── Dialog ────────────────────────────────────────────────────────────────
   dialog:
@@ -1015,6 +1034,115 @@ components:
     backgroundColor: "{colors.hairline}"
     thickness: "1px"
 
+  # ── Icon Button ───────────────────────────────────────────────────────────
+  # Square, icon-only action. Same height ladder as Button; the icon stays 20px
+  # at every size so icon-only controls keep their visual weight.
+  icon-button:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.md}"
+    size-sm: "32px"
+    size-default: "36px"
+    size-lg: "40px"
+    iconSize: "20px"
+
+  icon-button-hover:
+    backgroundColor: "{colors.surface-hover}"
+
+  icon-button-disabled:
+    backgroundColor: "{colors.surface-2}"
+    textColor: "{colors.ink-disabled}"
+    opacity: 0.6
+
+  # ── Toggle ────────────────────────────────────────────────────────────────
+  # Two-state pressed/unpressed control. In a ToggleGroup the items sit flush
+  # (gap 0) so the filled active state reads as a segment, not a button.
+  toggle:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-muted}"
+    typography: "{typography.body-sm-strong}"
+    rounded: "{rounded.md}"
+    height: "36px"
+    padding: "0 12px"
+
+  toggle-pressed:
+    backgroundColor: "{colors.surface-active}"
+    textColor: "{colors.ink}"
+
+  toggle-disabled:
+    textColor: "{colors.ink-disabled}"
+    opacity: 0.6
+
+  # ── Scroll Area ───────────────────────────────────────────────────────────
+  # Styled scroll container. The thumb is the only visible chrome; the track
+  # stays transparent so the scrollbar does not compete with content.
+  scroll-area-thumb:
+    backgroundColor: "{colors.surface-active}"
+    rounded: "{rounded.pill}"
+    thickness: "8px"
+
+  scroll-area-thumb-hover:
+    backgroundColor: "{colors.ink-disabled}"
+
+  # ── Collapsible ───────────────────────────────────────────────────────────
+  # Show/hide a single region. Height transition only. Never fade content in,
+  # it reads as a loading state.
+  collapsible-content:
+    duration: "{motion.normal}"
+    easing: "{motion.ease-out}"
+
+  # ── Text ──────────────────────────────────────────────────────────────────
+  # Typography primitive. Binds text to the 10 semantic roles; reach for this
+  # before writing raw size/weight classes.
+  text:
+    typography: "{typography.body-md}"      # default variant
+    textColor: "{colors.ink-body}"          # tone="default"
+
+  text-muted:
+    textColor: "{colors.ink-muted}"         # tone="muted"
+
+  text-primary:
+    textColor: "{colors.primary}"           # tone="primary"
+
+  # ── Label ─────────────────────────────────────────────────────────────────
+  label:
+    typography: "{typography.body-sm-strong}"
+    textColor: "{colors.ink}"
+
+  # ── Layout primitives ─────────────────────────────────────────────────────
+  # These carry no color of their own. They exist to keep spacing decisions on
+  # the token scale instead of in ad-hoc flex classes. Gap values map to
+  # {spacing.*}; every value below is a scale reference, never a raw px.
+  container:
+    maxWidth-xs: "480px"
+    maxWidth-sm: "640px"
+    maxWidth-md: "768px"
+    maxWidth-lg: "1024px"
+    maxWidth-xl: "1280px"
+    padding: "{spacing.md}"                 # default pad="md"
+    margin: "0 auto"
+
+  stack:
+    direction: "vertical"
+    gap: "{spacing.md}"                     # default gap="md"
+
+  inline:
+    direction: "horizontal"
+    gap: "{spacing.sm}"                     # default gap="sm"
+    align: "center"
+
+  grid:
+    display: "grid"
+    gap: "{spacing.md}"                     # default gap="md"
+
+  # ── Icon ──────────────────────────────────────────────────────────────────
+  # Sizes and strokes are canonical in the `icons:` block below. Repeated here
+  # only so the component registry resolves a binding for every entry.
+  icon:
+    size: "{icons.sizes.md}"                # 20px default
+    strokeWidth: "{icons.strokeWidth.default}"
+    color: "currentColor"
+
 icons:
   library: "Lucide"
   style: "line"
@@ -1034,7 +1162,7 @@ motion:
   instant:
     duration: "75ms"
     easing: "cubic-bezier(0, 0, 0.2, 1)"
-    use: "Micro-feedback — checkbox tick, ripple"
+    use: "Micro-feedback: checkbox tick, ripple"
 
   fast:
     duration: "150ms"
@@ -1044,7 +1172,7 @@ motion:
   normal:
     duration: "250ms"
     easing: "cubic-bezier(0, 0, 0.2, 1)"
-    use: "Standard default — most UI state changes"
+    use: "Standard default: most UI state changes"
 
   slow:
     duration: "400ms"
@@ -1059,19 +1187,19 @@ motion:
   spring:
     duration: "300ms"
     easing: "cubic-bezier(0.16, 1, 0.3, 1)"
-    use: "Snappy enter — dialogs, drawers, dropdowns"
+    use: "Snappy enter: dialogs, drawers, dropdowns"
 
   bounce:
     duration: "400ms"
     easing: "cubic-bezier(0.34, 1.56, 0.64, 1)"
-    use: "Playful elements — badges, status dots"
+    use: "Playful elements: badges, status dots"
 
   reduced-motion:
     duration: "0ms"
-    note: "All six durations collapse to 0ms via @media (prefers-reduced-motion: reduce) in motion.css — handled once at the token layer, not per-component."
+    note: "All six durations collapse to 0ms via @media (prefers-reduced-motion: reduce) in motion.css. Handled once at the token layer, not per-component."
 
 elevation:
-  # Light mode — progressive drop shadow
+  # Light mode, progressive drop shadow
   none:  "none"
   xs:    "0 1px 2px rgba(0,0,0,0.05)"
   sm:    "0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)"
@@ -1079,7 +1207,7 @@ elevation:
   lg:    "0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.05)"
   xl:    "0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08)"
   2xl:   "0 24px 64px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.10)"
-  # Dark mode — white hairline ring stacked on dimmed blur
+  # Dark mode, white hairline ring stacked on dimmed blur
   # xs-dark: "0 0 0 1px rgba(255,255,255,0.04), 0 1px 2px rgba(0,0,0,0.40)"
   # Ring opacity scales with elevation: 4% → 6% → 8% → 10%
   dark-note: "Shadows replace blur with a white-ring edge definition technique (rgba(255,255,255,0.04–0.10)) since drop shadows disappear on dark canvases."
@@ -1091,25 +1219,25 @@ z-index:
   sticky:   200     # sticky nav bar, sticky table headers
   overlay:  300     # dialog / sheet / drawer backdrop
   modal:    400     # dialogs, sheets, drawers
-  toast:    500     # always above modals — dismiss feedback must be visible
+  toast:    500     # always above modals. Dismiss feedback must be visible
   tooltip:  600     # always topmost
 
 imagery:
-  treatment: "Product UI screenshots in context — components shown on realistic dashboard layouts rather than isolated on white. Dark-panel product shots for Storybook story backgrounds where light-mode components need contrast. No stock photography. No abstract gradient heroes. The OKLCH Spectrum tints (10 curated hues) serve as the illustration and empty-state palette — sky blue, lavender, rose blush, peach, honey, mint, seafoam, periwinkle, sand, lilac."
+  treatment: "Product UI screenshots in context, components shown on realistic dashboard layouts rather than isolated on white. Dark-panel product shots for Storybook story backgrounds where light-mode components need contrast. No stock photography. No abstract gradient heroes. The OKLCH Spectrum tints (10 curated hues) serve as the illustration and empty-state palette: sky blue, lavender, rose blush, peach, honey, mint, seafoam, periwinkle, sand, lilac."
   examples: "Dashboard mockups with real data patterns (tables, charts, form flows). Storybook Autodocs canvases as primary documentation imagery. Lucide icon at 48px in --muted background for empty states. StatusDot + Badge combinations for live status indicators."
 
 voice:
-  tone: "Direct and precise. Engineering-literate without jargon. Addresses designers and engineers as peers — no hand-holding, no marketing superlatives. Error messages state what went wrong and what to do next. Documentation is example-first, prose-second. Token names over English descriptions wherever possible. Sentence case throughout — never Title Case For Emphasis."
+  tone: "Direct and precise. Engineering-literate without jargon. Addresses designers and engineers as peers. No hand-holding, no marketing superlatives. Error messages state what went wrong and what to do next. Documentation is example-first, prose-second. Token names over English descriptions wherever possible. Sentence case throughout. Never Title Case For Emphasis."
   examples:
     - "Use --error for validation states. Use --destructive for irreversible actions."
     - "36px default height. 6px radius. 16px horizontal padding."
-    - "Always pair an Input with a visible Label — placeholder is a hint, not a label."
+    - "Always pair an Input with a visible Label. Placeholder is a hint, not a label."
     - "One primary CTA per surface. Everything else is secondary or ghost."
     - "Dark mode is free if you use semantic aliases."
     - "Don't hardcode hex values in components. Don't write .dark overrides in component files."
 ---
 
-> **Map of this file** — the YAML front matter above is the machine-readable token source (colors, layout, typography, rounded, spacing, ~45 component specs, icons, motion, elevation, z-index, imagery, voice). The prose below explains the reasoning and the rules:
+> **Map of this file.** The YAML front matter above is the machine-readable token source (colors, layout, typography, rounded, spacing, 52 component specs, icons, motion, elevation, z-index, imagery, voice). The prose below explains the reasoning and the rules:
 >
 > [Overview](#overview) · [Colors](#colors) (OKLCH derivation, semantic aliases) · [Dark Mode](#dark-mode) (surface ladder, border strategy) · [Typography](#typography) (11 roles) · [Layout](#layout) (grid, containers, breakpoints, spacing) · [Elevation & Depth](#elevation--depth) · [Shapes](#shapes) (radius rules) · [Components](#components) (state coverage, **choosing the right component**, per-component notes) · [Accessibility](#accessibility) · [Do's & Don'ts](#dos--donts) · [Agent Usage](#agent-usage)
 >
@@ -1117,15 +1245,15 @@ voice:
 
 ## Overview
 
-Luma targets product teams building B2B SaaS, developer tools, and data-dense interfaces. The aesthetic is "calm confidence" — Linear density, Vercel precision, Radix accessibility. It should feel fast, trustworthy, and effortless.
+Luma targets product teams building B2B SaaS, developer tools, and data-dense interfaces. The aesthetic is "calm confidence": Linear density, Vercel precision, Radix accessibility. It should feel fast, trustworthy, and effortless.
 
 The emotional target: a developer or designer picking up Luma should feel like they're working with a tool that has already made all the right decisions for them. Nothing is surprising. Everything is intentional.
 
 **Three layers every AI tool must understand:**
 
-1. **Primitives** — raw OKLCH scales (`--luma-brand-600`, `--luma-neutral-50`). Never used directly in components.
-2. **Semantic aliases** — themed values components reference (`--primary`, `--background`, `--border`). The only layer components should touch.
-3. **Component tokens** — per-component slots (`--button-primary-bg`, `--input-height`). Override one component without changing the brand.
+1. **Primitives**: raw OKLCH scales (`--luma-brand-600`, `--luma-neutral-50`). Never used directly in components.
+2. **Semantic aliases**: themed values components reference (`--primary`, `--background`, `--border`). The only layer components should touch.
+3. **Component tokens**: per-component slots (`--button-primary-bg`, `--input-height`). Override one component without changing the brand.
 
 ---
 
@@ -1133,48 +1261,58 @@ The emotional target: a developer or designer picking up Luma should feel like t
 
 ### OKLCH palette derivation
 
-All Luma colors are computed in **OKLCH** (Lightness, Chroma, Hue) — a perceptually uniform color space where equal numeric steps look equally spaced to the human eye. Unlike HSL, OKLCH produces consistent relative contrast across hues, making it possible to build a multi-hue system where every status color at `L=0.46` appears equally prominent.
+All Luma colors are defined in **OKLCH** (Lightness, Chroma, Hue), a perceptually uniform color space where equal numeric steps look equally spaced to the human eye. Unlike HSL, OKLCH holds relative contrast steady across hues, so a status color and the brand blue at the same lightness read as equally prominent.
 
-The hex values in this DESIGN.md file are sRGB approximations for AI-tool interoperability. The canonical values are the OKLCH coordinates in `src/tokens/color.css`.
+**Which value is canonical.** The sRGB hex values in this file are the canonical, shipped values: `tokens.json`, the Figma library, and every downstream tool mirror them. The OKLCH coordinates below are *measured from* those hex values, not the other way round. They are published so the scale can be extended and re-derived in the same color space, and `node scripts/check-oklch.mjs` recomputes them from the hex on every run. If the two ever disagree the check fails, rather than letting a stale coordinate sit next to a real one.
+
+**A note on hue stability.** Hue is only meaningful above roughly `C ≥ 0.02`. The neutral scale sits at `C ≈ 0.008`, where 8-bit sRGB quantization swings the measured hue by 10–15° with no visible difference. Neutrals are authored at hue 250 and should stay there; do not "correct" a measured neutral hue back into the source.
 
 #### Hue map
 
+Measured from the shipped values, rounded to the nearest degree.
+
 | Role | Hue | Rationale |
 |---|---|---|
-| Primary (brand blue) | 254 | Electric, high-chroma. Never decorative — reserved for CTAs, focus, selection. |
-| Neutral (cool grey) | 250 | Slight blue undertone harmonises with primary without competing. |
-| Destructive / Error (red) | 25 | High-saturation warm red — universally understood as danger. |
-| Success (green) | 145 | Vivid leaf green — confidence, completion. |
-| Warning (amber) | 72 | Saturated amber — caution without panic. **Requires dark foreground text.** |
-| Info (blue) | 240 | Slightly shifted from primary (254) to avoid confusion in mixed contexts. |
+| Primary (brand blue) | 258 | Electric, high-chroma. Never decorative. Reserved for CTAs, focus, selection. |
+| Neutral (cool grey) | 250 (authored) | Slight blue undertone harmonises with primary without competing. Below the chroma floor where measured hue is stable. |
+| Destructive / Error (red) | 27 | High-saturation warm red. Universally understood as danger. |
+| Success (green) | 148 | Vivid leaf green, confidence, completion. |
+| Warning (amber) | 79 | Saturated amber, caution without panic. **Requires dark foreground text.** |
+| Info (blue) | 261 | Close to primary in hue; separated by lightness and context, not by hue. Do not rely on hue alone to tell them apart. |
 
-#### Primary scale (hue 254)
+#### Primary scale
 
-| Step | OKLCH | Hex approx | Semantic use |
+| Step | Hex (canonical) | Measured OKLCH | Semantic use |
 |---|---|---|---|
-| 50  | `oklch(0.97 0.02 254)` | `#f0f4ff` | — |
-| 100 | `oklch(0.94 0.04 254)` | `#dce8ff` | `--primary-muted` (light) |
-| 200 | `oklch(0.87 0.08 254)` | `#b8d0f8` | — |
-| 300 | `oklch(0.76 0.13 254)` | `#87b0f0` | — |
-| 400 | `oklch(0.66 0.19 254)` | `#5393f5` | `--primary` (dark mode) |
-| 500 | `oklch(0.57 0.22 254)` | `#2a7af0` | — |
-| 600 | `oklch(0.46 0.24 254)` | `#0060d4` | `--primary` (light mode) |
-| 700 | `oklch(0.38 0.22 254)` | `#004db8` | `--primary-pressed` |
-| 800 | `oklch(0.30 0.18 254)` | `#003a9a` | — |
-| 900 | `oklch(0.22 0.13 254)` | `#00267a` | — |
-| 950 | `oklch(0.16 0.08 254)` | `#001450` | `--primary-subtle` (dark) |
+| 50 | `#eef2ff` | `oklch(0.962 0.018 272)` | `--primary-subtle` (light) |
+| 100 | `#dce8ff` | `oklch(0.929 0.034 264)` | `--primary-muted` (light) |
+| 200 | `#b8d0f8` | `oklch(0.853 0.062 261)` | n/a |
+| 300 | `#87b0f0` | `oklch(0.752 0.103 259)` | n/a |
+| 400 | `#5393f5` | `oklch(0.667 0.160 259)` | `--primary` (dark mode) |
+| 500 | `#2a7af0` | `oklch(0.597 0.194 259)` | n/a |
+| 600 | `#0060d4` | `oklch(0.515 0.194 258)` | `--primary` (light mode) |
+| 700 | `#004fb8` | `oklch(0.457 0.179 259)` | `--primary-pressed` |
+| 800 | `#003a9a` | `oklch(0.386 0.166 261)` | n/a |
+| 900 | `#00267a` | `oklch(0.313 0.148 262)` | n/a |
+| 950 | `#001450` | `oklch(0.229 0.113 263)` | `--primary-subtle` (dark) |
+
+Chroma peaks at steps 500–600 and falls off toward both ends, which is what keeps the light tints from looking washed out and the dark steps from turning muddy.
 
 #### Extending the palette
 
-To add a new hue to the system, define a 11-step OKLCH scale at the same lightness breakpoints (0.97, 0.94, 0.87, 0.76, 0.66, 0.57, 0.46, 0.38, 0.30, 0.22, 0.16) with your target hue. Chroma should peak at step 500–600 and fall off at both ends. Register the scale in `src/tokens/color.css` under the primitives block.
+To add a hue, build an 11-step scale at Luma's measured lightness ladder:
+
+`0.962, 0.929, 0.853, 0.752, 0.667, 0.597, 0.515, 0.457, 0.386, 0.313, 0.229`
+
+Hold your target hue constant across the scale, peak chroma at steps 500–600, and taper it at both ends. Then run `node scripts/check-contrast.mjs` before committing. A new hue is not done until every text pair it introduces is asserted, not assumed.
 
 ### Semantic alias reference
 
 ```css
 /* Page / surface */
---background        /* canvas — #ffffff light / #0a0a0a dark */
---card              /* card panel — #ffffff light / #101010 dark */
---muted             /* subtle bg — #f2f2f5 light / #181818 dark */
+--background        /* canvas: #ffffff light / #0f1115 dark (neutral-900) */
+--card              /* card panel: #ffffff light / #1e2226 dark (neutral-800) */
+--muted             /* subtle bg: #f9f9fb light / #16191c dark (neutral-850) */
 
 /* Brand */
 --primary           /* #0060d4 light / #5393f5 dark */
@@ -1183,20 +1321,20 @@ To add a new hue to the system, define a 11-step OKLCH scale at the same lightne
 --primary-pressed   /* darker for pressed states */
 --primary-disabled  /* desaturated for disabled CTA */
 --primary-ring      /* 30% opacity focus halo */
---primary-subtle    /* barely tinted — selected rows, active nav */
---primary-muted     /* light tint — badges, highlights */
+--primary-subtle    /* barely tinted: selected rows: active nav */
+--primary-muted     /* light tint: badges: highlights */
 
 /* Text */
---foreground        /* #0f0f16 light / #f9f9fb dark */
---muted-foreground  /* #55556b light / ~#8888a0 dark */
+--foreground        /* #0f0f16 light / #f9feff dark (ink / ink-dark) */
+--muted-foreground  /* #55556b light / #9da1a5 dark (ink-muted / ink-muted-dark) */
 
 /* Borders */
---border            /* #e8e8ed light / ~#2a2a35 dark */
---ring              /* focus ring — = --primary in Luma */
+--border            /* #e8e8ed light / rgba(255,255,255,0.08) dark */
+--ring              /* focus ring, = --primary in Luma */
 
 /* Status */
---destructive       /* irreversible actions — delete, revoke */
---error             /* validation states — input rings, error banners */
+--destructive       /* irreversible actions: delete: revoke */
+--error             /* validation states: input rings, error banners */
 --success / --warning / --info   /* semantic status colors */
 ```
 
@@ -1206,39 +1344,41 @@ To add a new hue to the system, define a 11-step OKLCH scale at the same lightne
 
 ### How the swap works
 
-Dark mode is a single `.dark {}` class on `<html>`. All semantic aliases are redefined inside that block in `src/tokens/color.css`. Components reference semantic aliases exclusively — so adding `class="dark"` to the root element swaps the entire visual system with no component-level changes.
+Dark mode is a single `.dark {}` class on `<html>`. All semantic aliases are redefined inside that block in `src/tokens/color.css`. Components reference semantic aliases exclusively, so adding `class="dark"` to the root element swaps the entire visual system with no component-level changes.
 
 ```html
 <html>             <!-- light mode -->
-<html class="dark"> <!-- dark mode — all semantic aliases swap automatically -->
+<html class="dark"> <!-- dark mode, all semantic aliases swap automatically -->
 ```
 
-**Zero per-component overrides are needed or permitted.** If you find yourself writing `.dark .my-component { … }` in a component file, you're doing it wrong — the token is missing.
+**Zero per-component overrides are needed or permitted.** If you find yourself writing `.dark .my-component { … }` in a component file, you're doing it wrong. The token is missing.
 
 ### Key alias light/dark table
 
 | Alias | Light | Dark | Notes |
 |---|---|---|---|
-| `--background` | `#ffffff` | `#0a0a0a` | Near-black canvas |
-| `--card` | `#ffffff` | `#101010` | Slightly lifted from bg |
-| `--muted` | `#f2f2f5` | `#181818` | UI element default bg |
-| `--foreground` | `#0f0f16` | `#f9f9fb` | Primary text |
-| `--muted-foreground` | `#55556b` | `~#8888a0` | Secondary text |
-| `--border` | `#e8e8ed` | `~#2a2a35` | Dividers and outlines |
+| `--background` | `#ffffff` | `#0f1115` | Canvas, `neutral-900` |
+| `--card` | `#ffffff` | `#1e2226` | Card surface, `neutral-800` |
+| `--muted` | `#f9f9fb` | `#16191c` | Recessed / sidebar, `neutral-850` |
+| `--popover` | `#ffffff` | `#282c30` | Menus and popovers, `neutral-750` |
+| `--foreground` | `#0f0f16` | `#f9feff` | Primary text, 18.58:1 on canvas |
+| `--muted-foreground` | `#55556b` | `#9da1a5` | Secondary text, 7.27:1 on canvas |
+| `--border` | `#e8e8ed` | `rgba(255,255,255,0.08)` | Translucent white, never opaque grey |
 | `--primary` | `#0060d4` | `#5393f5` | brand-600 → brand-400 |
 | `--primary-foreground` | `#ffffff` | `#0f0f16` | Text on primary bg |
 | `--primary-subtle` | `#eef2ff` | brand-950 | Selected row bg |
-| `--overlay-bg` | `rgba(0,0,0,0.50)` | `rgba(0,0,0,0.65)` | Denser in dark — compensates for lower contrast |
+| `--overlay-bg` | `rgba(0,0,0,0.50)` | `rgba(0,0,0,0.65)` | Denser in dark. Compensates for lower contrast |
 
 ### Surface lift in dark mode (Geist/Linear convention)
 
-In dark mode, surfaces get **lighter** as they elevate — the opposite of light mode. This keeps modals and floating panels visually separated from the near-black canvas:
+In dark mode, surfaces get **lighter** as they elevate, the opposite of light mode. This keeps modals and floating panels visually separated from the near-black canvas:
 
 ```
-Canvas:    #0a0a0a   (--background)
-Sidebar:   #101010   (--card / subtle)
-Card:      #181818   (--muted)
-Popover:   #202020   (--bg-element-hover)
+Canvas:    #0f1115   (--background)        neutral-900 · oklch(0.178 0.008 250)
+Sidebar:   #16191c   (--muted / bg-2)       neutral-850 · oklch(0.210 0.008 250)
+Card:      #1e2226   (--card)               neutral-800 · oklch(0.250 0.009 250)
+Popover:   #282c30   (--popover)            neutral-750 · oklch(0.290 0.010 250)
+Pressed:   #32373b   (--bg-element-active)  neutral-700 · oklch(0.333 0.010 250)
 ```
 
 Shadows supplement this with a white-ring technique: each shadow level adds `0 0 0 1px rgba(255,255,255,N)` where N scales from 4% (xs) to 10% (xl), providing edge definition that's invisible on white canvases.
@@ -1252,10 +1392,10 @@ Shadows supplement this with a white-ring technique: each shadow level adds `0 0
 Luma's type scale is tuned for dense product UI, not marketing sites. The decisions:
 
 - **Negative tracking on display/heading** (`−0.05em`, `−0.025em`) locks large type together and gives it authority. Vercel and Linear both do this.
-- **Body text at 0 tracking** — at 14–16px, adding tracking makes text harder to read, not more refined.
-- **Weight split at 14px**: `body-sm` (400) for data content that should recede; `body-sm-strong` (500) for interactive labels that need to read clearly. The distinction matters — table cell data vs button label should feel different.
+- **Body text at 0 tracking**: at 14–16px, adding tracking makes text harder to read, not more refined.
+- **Weight split at 14px**: `body-sm` (400) for data content that should recede; `body-sm-strong` (500) for interactive labels that need to read clearly. The distinction matters: table cell data and a button label should feel different.
 - **Eyebrow / label-uppercase** for table headers and section labels. The 0.08em tracking + uppercase creates visual separation without requiring a larger font size.
-- **Geist Mono** for everything fixed-width. Token names, keyboard shortcuts, code, IDs — anything that benefits from alignment rhythm.
+- **Geist Mono** for everything fixed-width. Token names, keyboard shortcuts, code, IDs. Anything that benefits from alignment rhythm.
 
 ### Role reference
 
@@ -1271,7 +1411,7 @@ Luma's type scale is tuned for dense product UI, not marketing sites. The decisi
 | `body-sm-strong` | 14px · 500 | 1.5 | 0 | Button, Badge, Input labels |
 | `caption` | 12px · 400 | 1.5 | 0 | Helper text, metadata |
 | `label` | 12px · 500 | 1.25 | 0.1em | Section labels |
-| `eyebrow` | 12px · 500 | 1.25 | 0.08em | Table headers, category tags — **+ uppercase** |
+| `eyebrow` | 12px · 500 | 1.25 | 0.08em | Table headers, category tags, **+ uppercase** |
 | `mono` | 13px · 400 | 1.5 | 0 | Code, tokens, keyboard shortcuts |
 
 Naming bridge: the spec role `body` is exposed as `body-md` in the React `<Text>` API (`<Text variant="body-md">`). All other role names match 1:1.
@@ -1286,7 +1426,7 @@ The grid scales columns, gutters, and margins across breakpoints. The CSS tokens
 
 | Breakpoint | Min-width | Columns | Gutter | Margin | Use case |
 |---|---|---|---|---|---|
-| xs | — | 4 | 16px | 16px | Mobile portrait |
+| xs | n/a | 4 | 16px | 16px | Mobile portrait |
 | sm | 640px | 4 | 16px | 24px | Mobile landscape |
 | md | 768px | 8 | 24px | 32px | Tablet portrait |
 | lg | 1024px | 12 | 24px | 40px | Desktop |
@@ -1321,9 +1461,9 @@ Common column spans at 12-col desktop: full-width (12), two-thirds (8), half (6)
 | Element | Width | Collapsed |
 |---|---|---|
 | Navigation sidebar | 240px | 52px (icon rail) |
-| Detail / settings panel | 320px | — |
+| Detail / settings panel | 320px | n/a |
 
-The sidebar at 240px is the shadcn default and matches Linear and Vercel's dashboard sidebars. Don't deviate without a strong reason — users have muscle memory for this width.
+The sidebar at 240px is the shadcn default and matches Linear and Vercel's dashboard sidebars. Don't deviate without a strong reason. Users have muscle memory for this width.
 
 ### Spacing
 
@@ -1397,7 +1537,7 @@ Every interactive component needs all five states modeled:
 
 | State | CSS trigger | Visual signal |
 |---|---|---|
-| **Default** | — | Base appearance |
+| **Default** | n/a | Base appearance |
 | **Hover** | `:hover` | Background lift or tint |
 | **Focus** | `:focus-visible` | 2px ring, 2px offset, primary color |
 | **Pressed / Active** | `:active` | Darker background or scale |
@@ -1407,7 +1547,7 @@ Every interactive component needs all five states modeled:
 
 Overlapping components are the place AI tools (and humans) most often pick wrong. These tables are the tie-breakers; follow them exactly.
 
-**Overlays** — anything that floats above the page:
+**Overlays** are anything that floats above the page:
 
 | Need | Use | Never |
 |---|---|---|
@@ -1432,7 +1572,7 @@ Overlapping components are the place AI tools (and humans) most often pick wrong
 | Determinate long-running operation | Progress |
 | Nothing to display yet | Empty State |
 
-**Button variants** — emphasis is a ladder, not a palette:
+**Button variants.** Emphasis is a ladder, not a palette:
 
 | Variant | Use when |
 |---|---|
@@ -1457,49 +1597,49 @@ Overlapping components are the place AI tools (and humans) most often pick wrong
 
 ### Component notes
 
-**Button** — 9 variants. No shadow on filled variants; `shadow-xs` on outline. Warning uses `on-warning: #111111` — white text on amber fails WCAG AA. Icon-only buttons require `aria-label`.
+**Button**. 9 variants. No shadow on filled variants; `shadow-xs` on outline. Warning uses `on-warning` (#111111); white text on amber fails WCAG AA. Icon-only buttons require `aria-label`.
 
-**Input** — Always pair with a visible `<Label>`. Placeholder is a hint, never the only label. Error state uses `--error` ring (not `--destructive`). Never change border-width on error — use a ring to avoid layout shift.
+**Input**. Always pair with a visible `<Label>`. Placeholder is a hint, never the only label. Error state uses `--error` ring (not `--destructive`). Never change border-width on error. Use a ring to avoid layout shift.
 
-**Checkbox / Radio** — 16×16px. Checkbox gets 4px radius (not pill). Radio gets pill. Both use `--primary` for checked state, 50% opacity for disabled.
+**Checkbox / Radio**. 16×16px. Checkbox gets 4px radius (not pill). Radio gets pill. Both use `--primary` for checked state, 50% opacity for disabled.
 
-**Select / Combobox** — Same trigger height as Input (36px). Menu uses `shadow-md` — above the page but below Dialog. Use Select for ≤6 options, Combobox for ≥7 (adds search).
+**Select / Combobox**. Same trigger height as Input (36px). Menu uses `shadow-md`, above the page but below Dialog. Use Select for ≤6 options, Combobox for ≥7 (adds search).
 
-**Switch** — 36×20px track, 16×16px thumb. Off state uses `--surface-active` (neutral grey), not red — red implies error, not just "off."
+**Switch**. 36×20px track, 16×16px thumb. Off state uses `--surface-active` (neutral grey), not red. Red implies error, not just "off."
 
-**Tabs** — List has a subtle `--surface-2` background with 4px inner padding. Active trigger gets a white background + `shadow-xs`. This is the shadcn "pill tabs" pattern — avoid underline tabs for product UI.
+**Tabs**. List has a subtle `--surface-2` background with 4px inner padding. Active trigger gets a white background + `shadow-xs`. This is the shadcn "pill tabs" pattern. Avoid underline tabs for product UI.
 
-**Accordion** — Triggers should be `<button>` elements (Radix handles this). Open state tints the trigger to `--primary`. Content padding collapses the top padding to zero — the trigger provides top spacing.
+**Accordion**. Triggers should be `<button>` elements (Radix handles this). Open state tints the trigger to `--primary`. Content padding collapses the top padding to zero; the trigger provides top spacing.
 
-**Toast** — Always above Dialog in z-index (500 > 400). Max-width 360px. Use Sonner (`<Sonner>`) not a custom Toast for most cases — it handles stacking and dismiss automatically.
+**Toast**. Always above Dialog in z-index (500 > 400). Max-width 360px. Use Sonner (`<Sonner>`) not a custom Toast for most cases. It handles stacking and dismiss automatically.
 
-**Avatar** — Always `border-radius: pill`. Fallback (initials) uses `--primary-subtle` background + `--primary` text. Border `2px solid --canvas` creates stacking separation in avatar groups.
+**Avatar**. Always `border-radius: pill`. Fallback (initials) uses `--primary-subtle` background + `--primary` text. Border `2px solid --canvas` creates stacking separation in avatar groups.
 
-**Alert / Callout** — Use the status color's bg/border/text triple — never mix tokens across status groups. Icon color uses the solid status color (e.g., `--success`, not `--success-text`).
+**Alert / Callout**. Use the status color's bg/border/text triple. Never mix tokens across status groups. Icon color uses the solid status color (e.g., `--success`, not `--success-text`).
 
-**Empty State** — Icon at 48px on a `--surface-2` rounded background. Title in `body-sm-strong`, description in `body-sm` tone muted. Actions use standard `<Button>` — primary CTA if there's one action, outline if secondary.
+**Empty State**. Icon at 48px on a `--surface-2` rounded background. Title in `body-sm-strong`, description in `body-sm` tone muted. Actions use standard `<Button>`, primary CTA if there's one action, outline if secondary.
 
-**Progress** — Track is `--surface-2`, fill defaults to `--primary`. Status variants (success/warning/error) use their solid colors, not the bg/border/text tokens.
+**Progress**. Track is `--surface-2`, fill defaults to `--primary`. Status variants (success/warning/error) use their solid colors, not the bg/border/text tokens.
 
-**Textarea** — Mirrors Input for focus, error, and disabled states. Min-height 72px (three lines of `body-sm`). Resize vertical only — horizontal resize breaks layouts.
+**Textarea**. Mirrors Input for focus, error, and disabled states. Min-height 72px (three lines of `body-sm`). Resize vertical only. Horizontal resize breaks layouts.
 
-**Sheet** — Same surface treatment as Dialog (canvas bg, `xl` radius on the floating edge, `shadow-lg`, shared overlay). 400px wide from left or right. Use for editing flows that need more room than a Dialog; never for confirmations.
+**Sheet**. Same surface treatment as Dialog (canvas bg, `xl` radius on the floating edge, `shadow-lg`, shared overlay). 400px wide from left or right. Use for editing flows that need more room than a Dialog; never for confirmations.
 
-**Popover / HoverCard** — Same visual recipe (canvas, hairline border, `lg` radius, `shadow-md`, 320px max). The difference is the trigger: Popover opens on click and can contain interactive controls; HoverCard opens on hover (300ms delay) and is read-only. Never put a button inside a HoverCard.
+**Popover / HoverCard**. Same visual recipe (canvas, hairline border, `lg` radius, `shadow-md`, 320px max). The difference is the trigger: Popover opens on click and can contain interactive controls; HoverCard opens on hover (300ms delay) and is read-only. Never put a button inside a HoverCard.
 
-**Command palette** — The highest-elevation surface (`shadow-xl`), 560px max. Input row is 44px — taller than a standard Input to signal it's the primary act on this surface. Items follow the select-item pattern: `primary-subtle` background + `primary` text when active. Always show a `<Kbd>` hint for the shortcut that opened it.
+**Command palette**. The highest-elevation surface (`shadow-xl`), 560px max. Input row is 44px, taller than a standard Input to signal it's the primary act on this surface. Items follow the select-item pattern: `primary-subtle` background + `primary` text when active. Always show a `<Kbd>` hint for the shortcut that opened it.
 
-**Slider** — Track matches Progress (6px, `--surface-2`, pill). Thumb is a 16px canvas circle with `hairline-strong` border and `shadow-sm` — the one filled control that gets a shadow, because the thumb must read as grabbable.
+**Slider**. Track matches Progress (6px, `--surface-2`, pill). Thumb is a 16px canvas circle with `hairline-strong` border and `shadow-sm`. The one filled control that gets a shadow, because the thumb must read as grabbable.
 
-**Kbd** — Mono 13px on `--surface-1` with a 2px bottom border for key-cap depth. Use for every keyboard shortcut mention: menus, tooltips, command items. Chords render as separate Kbds, not one wide one.
+**Kbd**. Mono 13px on `--surface-1` with a 2px bottom border for key-cap depth. Use for every keyboard shortcut mention: menus, tooltips, command items. Chords render as separate Kbds, not one wide one.
 
-**Note** — Persistent inline guidance. Neutral surface (`--surface-1` + hairline), never status-tinted backgrounds — that's Alert's job. Only the optional icon takes a status color.
+**Note**. Persistent inline guidance. Neutral surface (`--surface-1` + hairline), never status-tinted backgrounds. That's Alert's job. Only the optional icon takes a status color.
 
-**CodeBlock / InlineCode** — Block code on `--surface-1` with hairline border and copy button; inline code on `--surface-2` with `sm` radius. Both always mono. Never style inline code with backticks-as-text.
+**CodeBlock / InlineCode**. Block code on `--surface-1` with hairline border and copy button; inline code on `--surface-2` with `sm` radius. Both always mono. Never style inline code with backticks-as-text.
 
-**StatusDot** — Never appears without a text label within the same flex row. `pulse` is reserved for genuinely live states (deploying, recording, online) — a static "active" status gets a static dot.
+**StatusDot**. Never appears without a text label within the same flex row. `pulse` is reserved for genuinely live states (deploying, recording, online); a static "active" status gets a static dot.
 
-**Separator** — 1px `--hairline`, full width or height. Use between list sections and toolbar groups; don't stack a Separator against a bordered element (double line).
+**Separator**. 1px `--hairline`, full width or height. Use between list sections and toolbar groups; don't stack a Separator against a bordered element (double line).
 
 ---
 
@@ -1507,18 +1647,70 @@ Overlapping components are the place AI tools (and humans) most often pick wrong
 
 ### Contrast requirements
 
-Luma targets **WCAG 2.1 AA** as minimum, **AAA** for body text.
+Luma targets **WCAG 2.1 AA** as its floor. AAA is reached on most text pairs and is a bonus, not a promise. The only guarantee the system makes is AA.
 
-| Content type | Minimum ratio | Target |
-|---|---|---|
-| Body text (< 18pt / 14pt bold) | 4.5 : 1 | 7 : 1 (AAA) |
-| Large text (≥ 18pt or 14pt bold) | 3 : 1 | 4.5 : 1 |
-| UI components and graphical objects | 3 : 1 | 4.5 : 1 |
-| Disabled controls | No requirement | Exempt — conveys unavailability |
+| Content type | Minimum ratio |
+|---|---|
+| Body text (< 18pt / 14pt bold) | 4.5 : 1 |
+| Large text (≥ 18pt or 14pt bold) | 3 : 1 |
+| UI components and graphical objects | 3 : 1 |
+| Disabled controls | Exempt, conveys unavailability |
 
-**Warning buttons require dark foreground.** `--warning` (#f4ad0a) against white is ~2.3:1. Against `#111111`, it passes AA at ~8.5:1. This is non-negotiable — amber + white text always fails.
+#### Verified contrast table
 
-Primary blue `#0060d4` against white: ~5.3:1 (passes AA for normal text, AAA for large text).
+Every ratio below is **computed from the shipped hex values**, never measured by eye or carried over from a previous version. Regenerate with `node scripts/check-contrast.mjs --table`; the same script run without a flag asserts every pair and exits non-zero if any of them stops passing.
+
+| Foreground | Background | Ratio | Required | Level |
+|---|---|---|---|---|
+| `ink` | `canvas` | 19.09:1 | 4.5:1 | AAA |
+| `ink` | `surface-1` | 18.15:1 | 4.5:1 | AAA |
+| `ink` | `surface-2` | 17.08:1 | 4.5:1 | AAA |
+| `ink-body` | `canvas` | 17.64:1 | 4.5:1 | AAA |
+| `ink-body` | `surface-1` | 16.78:1 | 4.5:1 | AAA |
+| `ink-body` | `surface-2` | 15.79:1 | 4.5:1 | AAA |
+| `ink-muted` | `canvas` | 7.25:1 | 4.5:1 | AAA |
+| `ink-muted` | `surface-1` | 6.89:1 | 4.5:1 | AA |
+| `ink-muted` | `surface-2` | 6.49:1 | 4.5:1 | AA |
+| `ink-subtle` | `canvas` | 4.81:1 | 4.5:1 | AA |
+| `ink-subtle` | `surface-1` | 4.57:1 | 4.5:1 | AA |
+| `on-primary` | `primary` | 5.79:1 | 4.5:1 | AA |
+| `on-success` | `success` | 4.54:1 | 4.5:1 | AA |
+| `on-warning` | `warning` | 9.74:1 | 4.5:1 | AAA |
+| `on-error` | `error` | 4.51:1 | 4.5:1 | AA |
+| `on-info` | `info` | 4.54:1 | 4.5:1 | AA |
+| `on-destructive` | `destructive` | 4.51:1 | 4.5:1 | AA |
+| `success-text` | `success-bg` | 7.63:1 | 4.5:1 | AAA |
+| `warning-text` | `warning-bg` | 6.61:1 | 4.5:1 | AA |
+| `error-text` | `error-bg` | 8.36:1 | 4.5:1 | AAA |
+| `info-text` | `info-bg` | 6.94:1 | 4.5:1 | AA |
+| `primary` | `canvas` | 5.79:1 | 3:1 | AA |
+| `ink-dark` | `canvas-dark` | 18.58:1 | 4.5:1 | AAA |
+| `ink-dark` | `surface-dark-2` | 15.74:1 | 4.5:1 | AAA |
+| `ink-body-dark` | `canvas-dark` | 17.68:1 | 4.5:1 | AAA |
+| `ink-body-dark` | `surface-dark-2` | 14.97:1 | 4.5:1 | AAA |
+| `ink-muted-dark` | `canvas-dark` | 7.27:1 | 4.5:1 | AAA |
+| `ink-muted-dark` | `surface-dark-2` | 6.15:1 | 4.5:1 | AA |
+| `ink-muted-dark` | `surface-dark-hover` | 5.41:1 | 4.5:1 | AA |
+| `ink-subtle-dark` | `canvas-dark` | 6.11:1 | 4.5:1 | AA |
+| `ink-subtle-dark` | `surface-dark-2` | 5.17:1 | 4.5:1 | AA |
+| `ink-subtle-dark` | `surface-dark-hover` | 4.55:1 | 4.5:1 | AA |
+| `primary-dark` | `canvas-dark` | 6.17:1 | 3:1 | AA |
+| `on-primary-dark` | `primary-dark` | 6.23:1 | 4.5:1 | AA |
+| `ink-disabled` | `canvas` | 2.47:1 | n/a | exempt |
+| `ink-disabled-dark` | `canvas-dark` | 2.47:1 | n/a | exempt |
+| `on-warning` | `canvas` | 18.88:1 | n/a | exempt |
+| `hairline` | `canvas` | 1.22:1 | n/a | deviation |
+| `hairline-strong` | `canvas` | 1.46:1 | n/a | deviation |
+
+#### Rules this table encodes
+
+**Warning requires a dark foreground.** `--warning` (`#f4ad0a`) against white is 1.94:1. It fails AA badly and is not a borderline call. Against `--on-warning` (`#111111`) it reaches 9.74:1. Every other solid status fill takes white text; amber is the one exception, and it is not negotiable.
+
+**Solid success and info are tuned to the AA line, not to taste.** `--success` and `--info` both sit at 4.54:1 against white. They were darkened to get there. Lightening either one for aesthetic reasons drops white-label buttons below AA, and the check will fail.
+
+**`--ink-subtle` has a surface ceiling.** It clears AA on `--canvas` (4.81:1) and `--surface-1` (4.57:1) and nowhere else. On `--surface-2` it is 4.31:1, which fails. Placeholders and tertiary text therefore belong on the page or on a recessed panel, never on a filled UI element. If you need subtle text on `--surface-2` or darker, step up to `--ink-muted`. The same ceiling applies in dark mode: `--ink-subtle-dark` holds through `--surface-dark-hover` (4.55:1) and fails on `--surface-dark-active` (3.89:1).
+
+**Borders are a documented deviation.** `--hairline` sits at 1.22:1 against the canvas and `--hairline-strong` at 1.46:1. Neither meets the 3:1 in WCAG 1.4.11. This is deliberate and shared with the systems Luma is modelled on: the hairlines are dividers and container edges, and the controls they enclose are identified by a visible label plus a focus ring that does clear 3:1. The input border is the weakest claim in the system and is called out here rather than buried. If you are building for a context with a hard 1.4.11 obligation, raise `--hairline` before you ship.
 
 ### Focus ring specification
 
@@ -1538,7 +1730,7 @@ The outer halo (20% opacity primary) helps the ring stand out against both light
 Geometry is tokenized:
 - `--ring-width: 2px`
 - `--ring-offset: 2px`
-- `--ring: var(--primary)` (semantic alias — swaps automatically in dark mode)
+- `--ring: var(--primary)` (semantic alias, swaps automatically in dark mode)
 
 ### Touch targets
 
@@ -1546,14 +1738,14 @@ Minimum 44×44px interactive target (Apple HIG / WCAG 2.5.5 Level AAA). Luma's 3
 
 Practical rules:
 - Icon buttons: wrap in a 44px container or add `p-2` to expand to 40×40px minimum
-- Checkbox / Radio: extend click target via `<label>` — the label expands the target area
+- Checkbox / Radio: extend click target via `<label>`; the label expands the target area
 - Table row actions: keep action icons at minimum 32×32px with 6px padding (→ 44×44px target)
 
 ### Screen reader guidance
 
 - Use Radix primitives for all interactive, focusable elements. Radix sets `role`, `aria-modal`, `aria-labelledby`, `aria-describedby`, and manages focus trapping automatically.
 - Every `<Input>` must have a programmatically associated `<Label>` (via `htmlFor`/`id` pairing or wrapping).
-- Icon-only buttons require `aria-label`. `<IconButton aria-label="Close" />` — never rely on a tooltip alone.
+- Icon-only buttons require `aria-label`. `<IconButton aria-label="Close" />`. Never rely on a tooltip alone.
 - Error messages must be wired via `aria-describedby` pointing to the error element's `id`.
 - For dialog destructive actions, write the title as a question ("Delete project?") and the confirm button as the verb ("Delete").
 - Loading states: use `aria-busy="true"` on the container and `aria-live="polite"` for status updates.
@@ -1576,7 +1768,7 @@ All duration tokens collapse to `0ms` at the token layer via:
 }
 ```
 
-This is handled once in `src/tokens/motion.css`. Zero per-component `@media` blocks are needed. The skeleton shimmer animation should also stop — the `--skeleton-duration` token becomes `0ms`, which CSS animations respect automatically.
+This is handled once in `src/tokens/motion.css`. Zero per-component `@media` blocks are needed. The skeleton shimmer animation should also stop: the `--skeleton-duration` token becomes `0ms`, which CSS animations respect automatically.
 
 ---
 
@@ -1584,19 +1776,19 @@ This is handled once in `src/tokens/motion.css`. Zero per-component `@media` blo
 
 ### Do
 
-1. **Use semantic aliases in every component.** `--primary`, `--background`, `--border` — never a raw OKLCH or hex value.
-2. **Use `--primary-hover` / `--primary-pressed` / `--primary-disabled`** for button and interactive element states. These are authored tokens, not inline `color-mix()` — rebrand-safe.
-3. **Use `--error` for validation UI.** Input border on bad value, error banner, error toast — all `--error`. Reserve `--destructive` for irreversible action buttons (Delete, Remove, Revoke).
-4. **Use `--primary-subtle` / `--primary-muted`** for tinted surfaces — selected rows, active nav, highlighted badges. Never use raw `--luma-brand-*` primitives in components.
+1. **Use semantic aliases in every component.** `--primary`, `--background`, `--border`. Never a raw OKLCH or hex value.
+2. **Use `--primary-hover` / `--primary-pressed` / `--primary-disabled`** for button and interactive element states. These are authored tokens, not inline `color-mix()`, which keeps them rebrand-safe.
+3. **Use `--error` for validation UI.** Input border on bad value, error banner, error toast, all `--error`. Reserve `--destructive` for irreversible action buttons (Delete, Remove, Revoke).
+4. **Use `--primary-subtle` / `--primary-muted`** for tinted surfaces: selected rows, active nav, highlighted badges. Never use raw `--luma-brand-*` primitives in components.
 5. **Pair every `<Input>` with a visible `<Label>`.** Placeholder disappears on type. It's a hint, not a label.
 6. **One primary CTA per surface.** Everything else is `secondary`, `outline`, or `ghost`. Never two `variant="default"` buttons side by side.
 7. **Keep all dark-mode overrides in `src/tokens/color.css` under `.dark {}`.** One block, no exceptions.
 8. **Use `warning` variant with the built-in dark foreground.** Amber + white text fails WCAG AA.
-9. **Add `shadow-xs` to bordered controls (outline button, Input, Select).** No shadow on filled buttons — the solid colour is the affordance.
+9. **Add `shadow-xs` to bordered controls (outline button, Input, Select).** No shadow on filled buttons. The solid colour is the affordance.
 10. **Set `type` and `autoComplete` on every Input.** Browsers and password managers depend on this. `type="email" autoComplete="email"` beats `type="text"` for every email field.
-11. **Use `body-sm-strong` (14px/500) for component labels** — Button, Badge, Input, Nav items. Use `body-sm` (14px/400) for data content — table cells, timestamps, descriptions.
+11. **Use `body-sm-strong` (14px/500) for component labels**: Button, Badge, Input, Nav items. Use `body-sm` (14px/400) for data content, table cells, timestamps, descriptions.
 12. **Use `eyebrow` / `label-uppercase` for table headers and section labels.** The 0.08em tracking + uppercase creates hierarchy without requiring a size increase.
-13. **Use Radix primitives for all interactive, focusable elements.** Dialog, DropdownMenu, Select, Tooltip, Popover, Tabs — Radix handles ARIA, focus trapping, and keyboard navigation.
+13. **Use Radix primitives for all interactive, focusable elements.** Dialog, DropdownMenu, Select, Tooltip, Popover, Tabs. Radix handles ARIA, focus trapping, and keyboard navigation.
 14. **Apply `aria-label` to icon-only buttons.** Screen readers announce "button" with no context otherwise.
 
 ### Don't
@@ -1607,10 +1799,10 @@ This is handled once in `src/tokens/motion.css`. Zero per-component `@media` blo
 18. **Never use primitive vars (`--luma-brand-500`) in components.** Primitives are for decoration and illustration only. Components touch semantic aliases.
 19. **Never change border-width on error state.** It shifts layout. Use a coloured ring (`ring-1 ring-[--error]`) on the existing 1px border instead.
 20. **Never use `<div onClick>` for dialogs, menus, tooltips, or dropdowns.** Always Radix. Raw divs break keyboard navigation and screen readers.
-21. **Never stack multiple primary buttons in one row.** If you feel the pull, reconsider the information architecture — one action should be primary.
+21. **Never stack multiple primary buttons in one row.** If you feel the pull, reconsider the information architecture: one action should be primary.
 22. **Never open a Dialog on top of another Dialog.** Close the first, or use a nested Popover for inline detail. Stacked modals disorient users.
 23. **Never apply `shadow-md` or higher to buttons or small form controls.** That elevation level belongs to floating panels, not interactive controls.
-24. **Never rely on placeholder text as the only label.** When the user starts typing, the hint disappears — killing context and accessibility.
+24. **Never rely on placeholder text as the only label.** When the user starts typing, the hint disappears, killing context and accessibility.
 25. **Never put toast notifications below `z-toast: 500`.** Dismiss feedback must remain visible even when a dialog is open. The ordering `tooltip (600) > toast (500) > modal (400) > overlay (300)` is non-negotiable.
 
 ---
@@ -1619,13 +1811,13 @@ This is handled once in `src/tokens/motion.css`. Zero per-component `@media` blo
 
 ### Rules for AI tools building with Luma
 
-1. **Start from CLAUDE.md.** It is the brand constitution — read it first in every new session. It contains the complete token reference, component patterns, Do/Don't rules, and file locations.
+1. **Start from CLAUDE.md.** It is the brand constitution, read it first in every new session. It contains the complete token reference, component patterns, Do/Don't rules, and file locations.
 
-2. **Never output raw color values in component code.** Not hex, not `rgb()`, not `oklch()`. Always a CSS custom property from the semantic layer. If a token doesn't exist yet, add it to `src/tokens/` — don't hardcode.
+2. **Never output raw color values in component code.** Not hex, not `rgb()`, not `oklch()`. Always a CSS custom property from the semantic layer. If a token doesn't exist yet, add it to `src/tokens/`. Don't hardcode.
 
 3. **When adding a new component, start from component tokens, not semantic aliases directly.** Define `--mycomponent-bg: var(--card)` in `components.css`, then reference `var(--mycomponent-bg)` in the component. This keeps the architecture coherent and makes per-brand overrides possible without touching component code.
 
-4. **Dark mode is automatic if you use semantic tokens.** You should never need to write `.dark` class logic inside a component file. If dark mode isn't working, the component is referencing a primitive or hardcoded value — trace back to the semantic alias.
+4. **Dark mode is automatic if you use semantic tokens.** You should never need to write `.dark` class logic inside a component file. If dark mode isn't working, the component is referencing a primitive or hardcoded value, trace back to the semantic alias.
 
 5. **All interactive elements use Radix primitives.** If you're about to write a `<div onClick>` for a focusable element, stop. The correct answer is `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, etc. This is non-negotiable for accessibility compliance.
 
@@ -1639,13 +1831,13 @@ You are building a UI component for Luma, a product-software design system.
 Stack: React · TypeScript · Tailwind v4 · CSS Custom Properties · Radix UI primitives.
 
 Architecture rules:
-- Use semantic tokens (--primary, --background, --border, --foreground) — never hardcode colors.
+- Use semantic tokens (--primary, --background, --border, --foreground). Never hardcode colors.
 - Use component tokens (--button-primary-bg) for component-scoped customisation.
-- All interactive elements use Radix primitives — Dialog, DropdownMenu, Select, Tooltip, etc.
-- Dark mode is automatic — use semantic aliases. Never add .dark overrides to component files.
+- All interactive elements use Radix primitives: Dialog, DropdownMenu, Select, Tooltip, etc.
+- Dark mode is automatic. Use semantic aliases. Never add .dark overrides to component files.
 - Spacing via --luma-space-* tokens or Tailwind classes (gap-4, p-6, etc.). No inline px values.
 - Errors use --error / --luma-error-*. Irreversible actions use --destructive. Never swap these.
-- Warning buttons: use the dark foreground (#111111) — amber + white fails WCAG AA.
+- Warning buttons: use the dark foreground (#111111). Amber + white fails WCAG AA.
 
 Reference: /Users/imran/Desktop/ClaudeProjects/AI Design System/CLAUDE.md
 
@@ -1656,4 +1848,4 @@ Component request: [describe the component, its states, and any variant requirem
 
 ## About
 
-Luma was designed and built by [Imran](https://imran.fi/) — a Senior Product Designer focused on design systems and AI-assisted workflows.
+Luma was designed and built by [Imran](https://imran.fi/), a Senior Product Designer focused on design systems and AI-assisted workflows.

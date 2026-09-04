@@ -1,11 +1,11 @@
 {
   "$schema": "https://luma.imran.fi/registry.schema.json",
   "name": "luma-ui",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Machine-readable component manifest for the Luma Design System. Each entry packages a component's variants, sizes, states, token bindings, rules, and example usage so an AI tool can build on-brand UI without parsing source files. JSON is used (not Markdown) because it is ~80% more token-efficient for this payload and removes ambiguity for agents.",
   "status": "specification",
   "installable": false,
-  "note": "This is the specification layer. Component source (React/TypeScript), Storybook examples, and the Figma library live in a separate private implementation repo. The `import` field on each component reflects the intended package API, not code shipped in this repo. Treat this manifest as authoritative for component shape, tokens, and rules — not as an installable registry.",
+  "note": "This is the specification layer. Component source (React/TypeScript), Storybook examples, and the Figma library live in a separate private implementation repo. The `import` field on each component reflects the intended package API, not code shipped in this repo. Treat this manifest as authoritative for component shape, tokens, and rules. Not as an installable registry.",
   "implementationRepo": "https://github.com/N1Imran/luma-ui (private)",
   "tokenSource": "tokens.json (foundation) + DESIGN.md components block (bindings)",
   "stateModel": ["default", "hover", "focus", "pressed", "disabled"],
@@ -16,7 +16,7 @@
     {
       "name": "Button",
       "category": "form",
-      "description": "Primary interactive control. Emphasis is a ladder, not a palette — one primary per surface.",
+      "description": "Primary interactive control. Emphasis is a ladder, not a palette. One primary per surface.",
       "import": "import { Button } from '@n1imran/luma-ui'",
       "variants": ["default", "secondary", "outline", "ghost", "link", "destructive", "success", "warning", "info"],
       "sizes": [
@@ -28,9 +28,9 @@
       "states": ["default", "hover", "focus", "pressed", "disabled"],
       "tokens": ["color.primary", "color.on-primary", "color.surface-2", "color.destructive", "radius.md", "typography.body-sm-strong"],
       "rules": [
-        "Filled variants (default, secondary, destructive, success, warning, info): NO shadow — the solid color is the affordance.",
+        "Filled variants (default, secondary, destructive, success, warning, info): NO shadow. The solid color is the affordance.",
         "Outline gets shadow.xs; ghost and link are intentionally flat.",
-        "Warning uses color.on-warning (#111111, dark text) — amber + white fails WCAG AA.",
+        "Warning uses color.on-warning (#111111, dark text). Amber + white fails WCAG AA.",
         "Icon-only buttons require an aria-label.",
         "All button icons are 20px at 2px stroke regardless of the size prop.",
         "destructive is for irreversible actions only; always confirm via Dialog."
@@ -58,9 +58,9 @@
       "height": "36px",
       "tokens": ["color.surface-2", "color.ink", "color.ink-subtle", "color.hairline", "color.primary", "color.error", "radius.md"],
       "rules": [
-        "Always pair with a visible Label — placeholder is a hint, never the only label.",
+        "Always pair with a visible Label. Placeholder is a hint, never the only label.",
         "Error state uses the color.error ring (not color.destructive).",
-        "Never change border-width on error — use a ring to avoid layout shift."
+        "Never change border-width on error. Use a ring to avoid layout shift."
       ],
       "example": "<><Label htmlFor=\"email\">Email</Label><Input id=\"email\" placeholder=\"you@example.com\" /></>"
     },
@@ -71,7 +71,7 @@
       "import": "import { Textarea } from '@n1imran/luma-ui'",
       "states": ["default", "focus", "error", "disabled"],
       "tokens": ["color.surface-2", "color.ink", "color.hairline", "color.primary", "radius.md"],
-      "rules": ["Min-height 72px (three lines of body-sm).", "Resize vertical only — horizontal resize breaks layouts."],
+      "rules": ["Min-height 72px (three lines of body-sm).", "Resize vertical only. Horizontal resize breaks layouts."],
       "example": "<Textarea placeholder=\"Add a description…\" />"
     },
     {
@@ -110,7 +110,7 @@
       "states": ["trigger", "open", "disabled", "item", "item-active", "item-disabled"],
       "height": "36px",
       "tokens": ["color.surface-2", "color.ink", "color.hairline", "color.primary-subtle", "color.primary", "radius.md", "shadow.md"],
-      "rules": ["Trigger height matches Input (36px).", "Menu uses shadow.md — above page, below Dialog.", "Use for ≤6 options; use Combobox for ≥7."],
+      "rules": ["Trigger height matches Input (36px).", "Menu uses shadow.md. Above page, below Dialog.", "Use for ≤6 options; use Combobox for ≥7."],
       "example": "<Select><SelectTrigger><SelectValue placeholder=\"Role…\" /></SelectTrigger></Select>"
     },
     {
@@ -131,7 +131,7 @@
       "import": "import { Switch } from '@n1imran/luma-ui'",
       "states": ["off", "on", "disabled"],
       "tokens": ["color.primary", "color.surface-active", "color.canvas", "radius.pill"],
-      "rules": ["36×20px track, 16×16px thumb.", "Off uses color.surface-active (neutral grey), not red — red implies error."],
+      "rules": ["36×20px track, 16×16px thumb.", "Off uses color.surface-active (neutral grey), not red. Red implies error."],
       "example": "<Switch checked={enabled} onCheckedChange={setEnabled} />"
     },
     {
@@ -141,7 +141,7 @@
       "import": "import { Slider } from '@n1imran/luma-ui'",
       "states": ["track", "fill", "thumb", "thumb-focus"],
       "tokens": ["color.surface-2", "color.primary", "color.canvas", "color.hairline-strong", "shadow.sm", "radius.pill"],
-      "rules": ["Track is 6px, surface-2, pill.", "Thumb is a 16px canvas circle with hairline-strong border + shadow.sm — the one filled control that gets a shadow."],
+      "rules": ["Track is 6px, surface-2, pill.", "Thumb is a 16px canvas circle with hairline-strong border + shadow.sm. The one filled control that gets a shadow."],
       "example": "<Slider defaultValue={[50]} max={100} />"
     },
     {
@@ -157,7 +157,7 @@
     {
       "name": "Form",
       "category": "form",
-      "description": "Composition wrapper — label, helper text, and error message slots. Built on react-hook-form + Zod.",
+      "description": "Composition wrapper: label, helper text, and error message slots. Built on react-hook-form + Zod.",
       "import": "import { Form, FormField, FormLabel, FormHelper, FormErrorMessage } from '@n1imran/luma-ui'",
       "tokens": ["typography.body-sm-strong", "typography.caption", "color.ink-muted", "color.error-text"],
       "rules": ["Helper text uses caption + ink-muted.", "Error message uses error-text, replaces helper on validation failure."],
@@ -170,7 +170,7 @@
       "description": "Blocking decision or confirmation the user must answer. Built on Radix.",
       "import": "import { Dialog } from '@n1imran/luma-ui'",
       "tokens": ["color.canvas", "color.overlay-bg", "radius.xl", "shadow.lg", "zIndex.modal"],
-      "rules": ["Use for confirmations — never a Toast.", "Use Sheet for long forms.", "Radix handles focus trap, escape, ARIA."],
+      "rules": ["Use for confirmations. Never a Toast.", "Use Sheet for long forms.", "Radix handles focus trap, escape, ARIA."],
       "example": "<Dialog><DialogTrigger /><DialogContent>…</DialogContent></Dialog>"
     },
     {
@@ -207,7 +207,7 @@
       "import": "import { DropdownMenu } from '@n1imran/luma-ui'",
       "states": ["item", "item-hover", "item-destructive", "item-destructive-hover", "separator"],
       "tokens": ["color.canvas", "color.surface-hover", "color.destructive", "radius.lg", "shadow.md", "zIndex.dropdown"],
-      "rules": ["Use for action lists — never a Popover with hand-rolled buttons.", "Destructive items use destructive text + tinted hover."],
+      "rules": ["Use for action lists. Never a Popover with hand-rolled buttons.", "Destructive items use destructive text + tinted hover."],
       "example": "<DropdownMenu><DropdownMenuTrigger /><DropdownMenuContent>…</DropdownMenuContent></DropdownMenu>"
     },
     {
@@ -216,13 +216,13 @@
       "description": "Label or hint on hover, no interaction inside.",
       "import": "import { Tooltip } from '@n1imran/luma-ui'",
       "tokens": ["color.inverse-canvas", "color.inverse-ink", "radius.sm", "zIndex.tooltip"],
-      "rules": ["Never place interactive content in a Tooltip.", "Highest z-index (600) — always topmost."],
+      "rules": ["Never place interactive content in a Tooltip.", "Highest z-index (600). Always topmost."],
       "example": "<Tooltip><TooltipTrigger /><TooltipContent>Copy link</TooltipContent></Tooltip>"
     },
     {
       "name": "Command",
       "category": "overlay",
-      "description": "Command palette — searchable action list. Highest-elevation surface.",
+      "description": "Command palette: searchable action list. Highest-elevation surface.",
       "import": "import { Command } from '@n1imran/luma-ui'",
       "states": ["input", "item", "item-active"],
       "tokens": ["color.canvas", "color.primary-subtle", "color.primary", "radius.xl", "shadow.xl", "zIndex.modal"],
@@ -237,7 +237,7 @@
       "import": "import { Tabs } from '@n1imran/luma-ui'",
       "states": ["list", "trigger", "trigger-active", "trigger-disabled"],
       "tokens": ["color.surface-2", "color.canvas", "color.ink", "radius.md", "shadow.xs"],
-      "rules": ["List has subtle surface-2 bg + 4px inner padding.", "Active trigger gets canvas bg + shadow.xs.", "Items sit flush (itemSpacing 0) — avoid underline tabs for product UI."],
+      "rules": ["List has subtle surface-2 bg + 4px inner padding.", "Active trigger gets canvas bg + shadow.xs.", "Items sit flush (itemSpacing 0). Avoid underline tabs for product UI."],
       "example": "<Tabs defaultValue=\"overview\"><TabsList><TabsTrigger value=\"overview\">Overview</TabsTrigger></TabsList></Tabs>"
     },
     {
@@ -288,7 +288,7 @@
       "import": "import { Badge } from '@n1imran/luma-ui'",
       "variants": ["default", "success", "error", "warning", "info"],
       "tokens": ["color.primary-muted", "color.primary", "color.success-bg", "color.success-text", "radius.pill"],
-      "rules": ["Badge icons are 12px.", "Use status variants only for status — not decoration."],
+      "rules": ["Badge icons are 12px.", "Use status variants only for status. Not decoration."],
       "example": "<Badge variant=\"success\">Published</Badge>"
     },
     {
@@ -318,7 +318,7 @@
       "import": "import { Alert } from '@n1imran/luma-ui'",
       "variants": ["info", "success", "warning", "error"],
       "tokens": ["color.info-bg", "color.info-border", "color.info-text", "color.info", "radius.lg"],
-      "rules": ["Use the status color's bg/border/text triple — never mix tokens across status groups.", "Icon uses the solid status color (e.g. color.success, not color.success-text)."],
+      "rules": ["Use the status color's bg/border/text triple. Never mix tokens across status groups.", "Icon uses the solid status color (e.g. color.success, not color.success-text)."],
       "example": "<Alert variant=\"warning\" title=\"Heads up\">Your trial ends soon.</Alert>"
     },
     {
@@ -423,7 +423,7 @@
       "import": "import { Note } from '@n1imran/luma-ui'",
       "variants": ["tip", "info", "warning", "deprecation"],
       "tokens": ["color.surface-1", "color.hairline", "color.ink", "radius.lg"],
-      "rules": ["Neutral surface (surface-1 + hairline), never status-tinted backgrounds — that's Alert's job.", "Only the optional icon takes a status color."],
+      "rules": ["Neutral surface (surface-1 + hairline), never status-tinted backgrounds. That's Alert's job.", "Only the optional icon takes a status color."],
       "example": "<Note variant=\"tip\" icon title=\"Pro tip\">Press <Kbd>⌘K</Kbd> to open the palette.</Note>"
     },
     {
@@ -527,7 +527,7 @@
         { "name": "default", "size": "20px", "stroke": "2px" },
         { "name": "lg", "size": "24px", "stroke": "2px" }
       ],
-      "rules": ["Under 20px → 1px stroke; 20px and up → 2px stroke.", "Inherits color from parent currentColor — never set icon color directly."],
+      "rules": ["Under 20px → 1px stroke; 20px and up → 2px stroke.", "Inherits color from parent currentColor. Never set icon color directly."],
       "example": "<Icon name=\"Search\" size=\"sm\" />"
     },
     {

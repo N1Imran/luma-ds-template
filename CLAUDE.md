@@ -3,7 +3,7 @@ name: Luma Design System
 description: Token-driven React design system. Zero hardcoded colours. Automatic dark mode via OKLCH semantic aliases.
 colors:
   # Values mirror DESIGN.md, the canonical brand token source. Edit DESIGN.md first, then sync here.
-  primary: "#0060d4"                # brand-600 · oklch(0.46 0.24 254)
+  primary: "#0060d4"                # brand-600 · oklch(0.515 0.194 258)
   primary-hover: "#1472e8"
   primary-pressed: "#004fb8"
   primary-disabled: "#8db8ef"
@@ -17,16 +17,16 @@ colors:
   muted-foreground: "#55556b"       # ink-muted
   border: "#e8e8ed"                 # hairline
   input: "#e8e8ed"                  # hairline
-  destructive: "#e03131"            # irreversible actions · hue 25
+  destructive: "#e03131"            # irreversible actions · hue 27
   destructive-foreground: "#ffffff"
   error: "#e03131"                  # validation states
-  success: "#169a45"                # hue 145
+  success: "#008935"                # hue 148 · white label = 4.54:1, do not lighten
   success-foreground: "#ffffff"
   success-bg: "#edfcf2"
   success-text: "#155c2b"
-  warning: "#f4ad0a"                # hue 72
+  warning: "#f4ad0a"                # hue 79
   warning-foreground: "#111111"     # dark text: amber + white fails WCAG AA
-  info: "#3b7ef4"                   # hue 240
+  info: "#2f71e6"                   # hue 261 · white label = 4.54:1, do not lighten
   info-foreground: "#ffffff"
 typography:
   display:
@@ -188,16 +188,16 @@ components:
     padding: 8px
 ---
 
-# CLAUDE.md — Luma Design System
+# CLAUDE.md: Luma Design System
 
 > This file is read automatically by Claude Code and AI tools.
 > It is the brand constitution for Luma. Follow all rules here without exception.
 >
 > Luma is built on **three token layers**:
 >
-> 1. **Primitive OKLCH scales** (`--luma-brand-600`, `--luma-neutral-50`) — raw colour, never used directly in components
-> 2. **Semantic aliases** (`--primary`, `--background`, `--border`) — the values components reference for theming
-> 3. **Component tokens** (`--button-primary-bg`, `--card-radius`, `--input-height`) — per-component slots that reference semantic aliases
+> 1. **Primitive OKLCH scales** (`--luma-brand-600`, `--luma-neutral-50`): raw colour, never used directly in components
+> 2. **Semantic aliases** (`--primary`, `--background`, `--border`): the values components reference for theming
+> 3. **Component tokens** (`--button-primary-bg`, `--card-radius`, `--input-height`): per-component slots that reference semantic aliases
 >
 > **Token source of truth:** brand token values are canonical in `DESIGN.md` (its YAML front matter). The YAML front matter above mirrors those values for the component-token layer; `pnpm tokens:gen-components` reads it and regenerates `src/tokens/components.generated.css`. The CSS vars in `src/tokens/` are the canonical implementation; the YAML's sRGB hex values exist for AI-tool interoperability (Stitch, Cursor, etc. that parse the spec without reading CSS). If `DESIGN.md` and this file ever disagree, `DESIGN.md` wins.
 
@@ -205,36 +205,36 @@ components:
 
 ## Overview
 
-**Luma** is a clean, minimal, precision-engineered React design system. It targets product teams building B2B SaaS, developer tools, and data-dense interfaces. The aesthetic is "calm confidence" — inspired by Vercel, Linear, and Radix. It should feel fast, trustworthy, and effortless.
+**Luma** is a clean, minimal, precision-engineered React design system. It targets product teams building B2B SaaS, developer tools, and data-dense interfaces. The aesthetic is "calm confidence", inspired by Vercel, Linear, and Radix. It should feel fast, trustworthy, and effortless.
 
 The emotional target: a developer or designer picking up Luma should feel like they're working with a tool that has already made all the right decisions for them. Nothing is surprising. Everything is intentional.
 
 **Stack:** React · TypeScript · Radix UI primitives · shadcn/ui patterns · Tailwind CSS v4 · CSS Custom Properties · OKLCH colour science · Storybook + Chromatic · Figma Code Connect.
 
 **Three audiences:**
-1. **AI tools (you)** — this file is your guide. Always build from tokens.
-2. **Designers** — work in Figma; Code Connect surfaces real import code in Dev Mode.
-3. **Developers** — reference Storybook deployed to Chromatic.
+1. **AI tools (you)**. This file is your guide. Always build from tokens.
+2. **Designers**: work in Figma; Code Connect surfaces real import code in Dev Mode.
+3. **Developers**: reference Storybook deployed to Chromatic.
 
 ---
 
 ## Colors
 
-Luma's palette is rooted in Vercel Blue — a high-chroma electric blue at hue 254 in OKLCH space. It is perceptually uniform: every step on the scale appears equally spaced to the human eye, unlike HSL.
+Luma's palette is rooted in Vercel Blue, a high-chroma electric blue at hue 258 in OKLCH space. It is perceptually uniform: every step on the scale appears equally spaced to the human eye, unlike HSL.
 
-- **Primary (electric blue, hue 254):** The Luma signature. Used exclusively for primary CTAs, focus rings, interactive highlights, and brand moments. Never used decoratively.
+- **Primary (electric blue, hue 258):** The Luma signature. Used exclusively for primary CTAs, focus rings, interactive highlights, and brand moments. Never used decoratively.
 - **Neutral (cool grey, hue 250):** A blue-undertone grey that harmonises with the brand blue. Used for all surfaces, text, borders, and muted states. The slight blue undertone keeps it from feeling flat.
-- **Destructive (red, hue 25):** Danger, delete, irreversible actions only.
-- **Success (green, hue 145):** Confirmation, published, positive states.
-- **Warning (amber, hue 72):** Caution. Uses a dark foreground (not white) to meet WCAG AA contrast.
-- **Info (blue, hue 240):** Informational. Slightly shifted from primary to avoid confusion.
+- **Destructive (red, hue 27):** Danger, delete, irreversible actions only.
+- **Success (green, hue 148):** Confirmation, published, positive states.
+- **Warning (amber, hue 79):** Caution. Uses a dark foreground (not white) to meet WCAG AA contrast.
+- **Info (blue, hue 261):** Informational. Sits close to primary in hue. They are separated by lightness and context, not by hue, so never rely on hue alone to tell them apart.
 
 **Dark mode:** Every semantic alias swaps in `.dark {}` in `src/tokens/color.css`. One block. Zero per-component overrides. If you use semantic tokens, dark mode is free.
 
 **Dark mode neutral ladder (OKLCH-derived):** the dark end of the neutral scale has *two extra stops* (`--luma-neutral-750`, `--luma-neutral-850`) for popover and recessed surfaces, because the standard 50→950 spread doesn't give enough perceptual granularity between deep-neutral surfaces. This is the same pattern Linear, Vercel, Notion use.
 
 ```css
-/* Dark-mode surface ladder — alias to the OKLCH neutral scale */
+/* Dark-mode surface ladder: alias to the OKLCH neutral scale */
 --background:  var(--luma-neutral-900);  /* oklch(0.178 0.008 250) · page bg          */
 --bg-2:        var(--luma-neutral-850);  /* oklch(0.21  0.008 250) · sidebars         */ /* NEW stop */
 --card:        var(--luma-neutral-800);  /* oklch(0.25  0.009 250) · cards            */
@@ -242,40 +242,42 @@ Luma's palette is rooted in Vercel Blue — a high-chroma electric blue at hue 2
 --bg-element-active: var(--luma-neutral-700);  /* pressed / selected                 */
 ```
 
-**Rule: no raw `oklch()` or hex literals in `.dark {}`.** Every dark-mode surface alias references a neutral primitive. The neutral scale is the single perceptual source of truth — palette tweaks happen in *one place* (the primitive definitions). The same rule applies to Figma: every dark surface variable aliases to a `Neutral/N` primitive — never a standalone sRGB value.
+**Rule: no raw `oklch()` or hex literals in `.dark {}`.** Every dark-mode surface alias references a neutral primitive. The neutral scale is the single perceptual source of truth: palette tweaks happen in *one place* (the primitive definitions). The same rule applies to Figma: every dark surface variable aliases to a `Neutral/N` primitive. Never a standalone sRGB value.
 
 ### Surface, border & foreground ladders (Geist/Linear-style)
 
-For UI that needs explicit elevation, hover/active states, or graded text contrast, use these numeric ladders. They sit alongside the shadcn semantic aliases — both reference the same primitives.
+For UI that needs explicit elevation, hover/active states, or graded text contrast, use these numeric ladders. They sit alongside the shadcn semantic aliases; both reference the same primitives.
 
 ```css
-/* Surface ladder — page → recessed → card → elevated */
+/* Surface ladder: page → recessed → card → elevated */
 var(--bg-1)              /* page background (= --background) */
-var(--bg-2)              /* subtle surface — sidebars, recessed sections */
+var(--bg-2)              /* subtle surface: sidebars: recessed sections */
                          /* (use --card for cards, --popover for menus) */
 
-/* Element backgrounds — chips, hoverable items, toggles */
+/* Element backgrounds: chips, hoverable items, toggles */
 var(--bg-element)        /* default */
 var(--bg-element-hover)  /* hover state */
 var(--bg-element-active) /* pressed / selected */
 
-/* Border ladder — three levels of emphasis */
-var(--border-subtle)     /* faint dividers, list separators */
-var(--border-default)    /* inputs, panels (= --border, --input) */
-var(--border-strong)     /* focused state, emphasis */
+/* Border ladder: three levels of emphasis */
+var(--border-subtle)     /* faint dividers: list separators */
+var(--border-default)    /* inputs: panels (= --border, --input) */
+var(--border-strong)     /* focused state: emphasis */
 
-/* Foreground ladder — four levels of text contrast */
-var(--fg-strong)         /* headings, button labels (= --foreground) */
+/* Foreground ladder: four levels of text contrast */
+var(--fg-strong)         /* headings: button labels (= --foreground) */
 var(--fg-default)        /* body text */
-var(--fg-muted)          /* secondary, captions (= --muted-foreground) */
-var(--fg-subtle)         /* placeholders, helper text */
+var(--fg-muted)          /* secondary: captions (= --muted-foreground) */
+var(--fg-subtle)         /* placeholders: helper text · see surface ceiling below */
 var(--fg-disabled)       /* disabled controls */
 ```
 
 All are available as Tailwind utilities: `bg-1`, `bg-2`, `bg-element`, `bg-element-hover`, `bg-element-active`, `border-subtle`, `border-strong`, `text-fg-strong`, `text-fg-muted`, etc.
 
+**`--fg-subtle` has a surface ceiling.** It clears WCAG AA on `--bg-1` (4.81:1) and on the recessed `--bg-2` (4.57:1), and nowhere else. On `--bg-element` it drops to 4.31:1 and fails. So subtle text belongs on the page or a recessed panel, never on a filled element. Need subtle-looking text on `--bg-element` or darker? Step up to `--fg-muted`. The same ceiling applies in dark mode: it holds through `--popover` (4.55:1) and fails on `--bg-element-active` (3.89:1). `node scripts/check-contrast.mjs` asserts this ceiling and fails the run if a palette tweak quietly moves it.
+
 ```tsx
-{/* Sidebar pattern — recessed surface, subtle border, muted text */}
+{/* Sidebar pattern: recessed surface, subtle border, muted text */}
 <aside className="bg-2 border-r border-subtle">
   <span className="text-fg-subtle uppercase">Workspace</span>
   <a className="hover:bg-element-hover text-fg-muted">Inbox</a>
@@ -284,43 +286,43 @@ All are available as Tailwind utilities: `bg-1`, `bg-2`, `bg-element`, `bg-eleme
 ```
 
 ```css
-/* ── Semantic aliases — the only values components use ── */
+/* ── Semantic aliases. The only values components use ── */
 var(--background)          /* page/surface background */
 var(--foreground)          /* default text */
 var(--card)                /* card surface */
 var(--muted)               /* subtle background */
 var(--muted-foreground)    /* secondary/helper text */
-var(--border)              /* dividers, outlines */
+var(--border)              /* dividers: outlines */
 var(--input)               /* form input borders */
 var(--ring)                /* focus ring */
-var(--primary)             /* brand CTA — electric blue */
+var(--primary)             /* brand CTA: electric blue */
 var(--primary-foreground)  /* text on primary bg */
 var(--secondary)           /* secondary actions */
 var(--accent)              /* hover states */
-var(--destructive)         /* irreversible actions — delete buttons, confirm dialogs */
-var(--error)               /* validation states — input error rings, error banners, toasts */
+var(--destructive)         /* irreversible actions: delete buttons, confirm dialogs */
+var(--error)               /* validation states: input error rings, error banners, toasts */
 var(--success)             /* confirmed / positive */
-var(--warning)             /* caution — amber */
-var(--info)                /* informational — blue */
+var(--warning)             /* caution: amber */
+var(--info)                /* informational: blue */
 
 /* ── Primary interactive states ── */
-var(--primary-hover)       /* lighter — hover bg for primary CTA */
-var(--primary-pressed)     /* darker — pressed / active state */
+var(--primary-hover)       /* lighter: hover bg for primary CTA */
+var(--primary-pressed)     /* darker: pressed / active state */
 var(--primary-ring)        /* focus halo around primary elements */
-var(--primary-disabled)    /* desaturated — disabled primary CTA bg */
+var(--primary-disabled)    /* desaturated: disabled primary CTA bg */
 
 /* ── Primary tinted surfaces ── */
-var(--primary-subtle)      /* barely tinted — selected rows, active nav bg */
-var(--primary-muted)       /* light tint — badges, active item highlights */
+var(--primary-subtle)      /* barely tinted: selected rows: active nav bg */
+var(--primary-muted)       /* light tint: badges: active item highlights */
 
 /* ── Status semantic tokens (bg / border / solid / text) ── */
-var(--luma-success-*)  /* green   — hue 145 */
-var(--luma-warning-*)  /* amber   — hue 72  */
-var(--luma-error-*)    /* red     — hue 25  */
-var(--luma-info-*)     /* blue    — hue 240 */
+var(--luma-success-*)  /* green: hue 148 */
+var(--luma-warning-*)  /* amber: hue 79  */
+var(--luma-error-*)    /* red: hue 27  */
+var(--luma-info-*)     /* blue: hue 261 */
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * TOKEN USAGE GUIDE — which "red" token to reach for:
+ * TOKEN USAGE GUIDE: which "red" token to reach for:
  *
  *   --destructive    → irreversible action buttons (Delete, Remove, Revoke)
  *                      and their confirm dialogs. This is a CHOICE the user makes.
@@ -335,9 +337,9 @@ var(--luma-info-*)     /* blue    — hue 240 */
  *   --luma-error-fg     → text on a solid --luma-error-solid background (white)
  * ───────────────────────────────────────────────────────────────────────────── */
 
-/* ── Primitive scales (decorative / illustrations only — not in components) ── */
-var(--luma-brand-50) … var(--luma-brand-950)     /* blue  hue 254 */
-var(--luma-neutral-0) … var(--luma-neutral-950)  /* grey  hue 250 — note: -750 and -850 are
+/* ── Primitive scales (decorative / illustrations only, not in components) ── */
+var(--luma-brand-50) … var(--luma-brand-950)     /* blue  hue 258 */
+var(--luma-neutral-0) … var(--luma-neutral-950)  /* grey  hue 250: note: -750 and -850 are
                                                     extra dark-end stops for popover and
                                                     recessed surfaces. The scale is dense at
                                                     the dark end because dark UIs need it. */
@@ -346,10 +348,10 @@ var(--luma-rose-50)   … var(--luma-rose-950)     /* hue 350 */
 var(--luma-amber-50)  … var(--luma-amber-950)    /* hue 72  */
 var(--luma-teal-50)   … var(--luma-teal-950)     /* hue 192 */
 
-/* ── Spectrum — 10 curated accent tints, no semantic meaning ── */
+/* ── Spectrum: 10 curated accent tints, no semantic meaning ── */
 var(--luma-spectrum-1) … var(--luma-spectrum-10)
 
-/* ── Chart — 8 perceptually balanced colours ── */
+/* ── Chart: 8 perceptually balanced colours ── */
 var(--chart-1) … var(--chart-8)
 ```
 
@@ -357,11 +359,11 @@ var(--chart-1) … var(--chart-8)
 
 ## Typography
 
-Luma uses **Geist** (sans) and **Geist Mono** for all text. Geist was designed by Vercel for UI — it is neutral, legible at small sizes, and has a slightly technical character that fits developer-tool aesthetics. Mono is used for code, tokens, labels, and anything that benefits from fixed-width rhythm.
+Luma uses **Geist** (sans) and **Geist Mono** for all text. Geist was designed by Vercel for UI. It is neutral, legible at small sizes, and has a slightly technical character that fits developer-tool aesthetics. Mono is used for code, tokens, labels, and anything that benefits from fixed-width rhythm.
 
-Type scale follows a tight hierarchy: Display and Heading use negative letter-spacing for a locked, confident feel. Body text uses relaxed leading for readability. Captions are muted — `--muted-foreground` — never `--foreground`, to maintain visual hierarchy.
+Type scale follows a tight hierarchy: Display and Heading use negative letter-spacing for a locked, confident feel. Body text uses relaxed leading for readability. Captions are muted (`--muted-foreground`), never `--foreground`, to maintain visual hierarchy.
 
-### Semantic roles (preferred — use these in components)
+### Semantic roles (preferred: use these in components)
 
 10 named roles bundle size + weight + leading + tracking. **Always reach for these before picking sizes by hand.**
 
@@ -373,13 +375,13 @@ Type scale follows a tight hierarchy: Display and Heading use negative letter-sp
 | `subtitle` | 20px · 600 | Supporting headings, card titles (h3) |
 | `body-lg` | 18px · 500 | Emphasis paragraphs, intro copy |
 | `body-md` | 16px · 400 | Default body copy |
-| `body-sm` | 14px · 400 | Secondary content — table cells, timestamps, descriptions |
-| `body-sm-strong` | 14px · 500 | Component default — Button, Badge, Input labels, nav items |
+| `body-sm` | 14px · 400 | Secondary content, table cells, timestamps, descriptions |
+| `body-sm-strong` | 14px · 500 | Component default: Button, Badge, Input labels, nav items |
 | `caption` | 12px · 400 | Helper text, metadata |
 | `label` | 12px · 500 · widest · uppercase | Section labels, table headers |
 | `mono` | 13px · Geist Mono | Code, tokens, fixed-width data |
 
-Three ways to use them — pick the most ergonomic for your context:
+Three ways to use them: pick the most ergonomic for your context:
 
 ```tsx
 // 1. React component (most ergonomic)
@@ -399,20 +401,20 @@ Three ways to use them — pick the most ergonomic for your context:
 }
 ```
 
-### Primitive scale (escape hatch — only when roles don't fit)
+### Primitive scale (escape hatch, only when roles don't fit)
 
 ```css
 var(--luma-font-sans)        /* Geist → Inter fallback */
 var(--luma-font-mono)        /* Geist Mono → JetBrains Mono fallback */
 
-var(--luma-text-xs)          /* 12px — caption, label */
-var(--luma-text-sm)          /* 14px — component default */
-var(--luma-text-base)        /* 16px — body */
-var(--luma-text-lg)          /* 18px — large body */
-var(--luma-text-xl)          /* 20px — subtitle */
-var(--luma-text-2xl)         /* 24px — title */
-var(--luma-text-3xl)         /* 32px — heading */
-var(--luma-text-4xl)         /* 40px — display */
+var(--luma-text-xs)          /* 12px: caption, label */
+var(--luma-text-sm)          /* 14px: component default */
+var(--luma-text-base)        /* 16px: body */
+var(--luma-text-lg)          /* 18px: large body */
+var(--luma-text-xl)          /* 20px: subtitle */
+var(--luma-text-2xl)         /* 24px: title */
+var(--luma-text-3xl)         /* 32px: heading */
+var(--luma-text-4xl)         /* 40px: display */
 var(--luma-text-5xl)         /* 48px */
 
 var(--luma-weight-regular)   /* 400 */
@@ -420,9 +422,9 @@ var(--luma-weight-medium)    /* 500 */
 var(--luma-weight-semibold)  /* 600 */
 var(--luma-weight-bold)      /* 700 */
 
-var(--luma-leading-tight)    /* 1.25 — headings */
-var(--luma-leading-normal)   /* 1.5  — body */
-var(--luma-leading-relaxed)  /* 1.625 — long-form */
+var(--luma-leading-tight)    /* 1.25: headings */
+var(--luma-leading-normal)   /* 1.5: body */
+var(--luma-leading-relaxed)  /* 1.625: long-form */
 ```
 
 ---
@@ -431,7 +433,7 @@ var(--luma-leading-relaxed)  /* 1.625 — long-form */
 
 Luma uses a **4px base grid**. All spacing decisions are multiples of 4. The t-shirt scale (xs → 3xl) covers the most common spacings; numeric vars (`--luma-space-1` through `--luma-space-64`) cover everything else.
 
-The visual language is **dense but breathable** — components are compact (36px default height for inputs and buttons, matching Vercel/Linear) but have enough internal padding that they never feel cramped. Page layouts should use generous outer margins; component groups use tight internal spacing.
+The visual language is **dense but breathable**. Components are compact (36px default height for inputs and buttons, matching Vercel/Linear) but have enough internal padding that they never feel cramped. Page layouts should use generous outer margins; component groups use tight internal spacing.
 
 ```css
 var(--luma-space-xs)   /* 4px  */
@@ -449,7 +451,7 @@ var(--luma-space-3xl)  /* 64px */
 
 ## Elevation & Depth
 
-Shadows follow a strict elevation ladder. The key insight: **filled buttons have NO shadow** — solid colour is the affordance. Shadows belong on surfaces that need to float above the page.
+Shadows follow a strict elevation ladder. The key insight is that **filled buttons have NO shadow**; the solid colour is the affordance. Shadows belong on surfaces that need to float above the page.
 
 | Level | Token | Use | Examples |
 |---|---|---|---|
@@ -466,41 +468,41 @@ In dark mode, shadows use `rgba(0,0,0,N)` + a `1px rgba(255,255,255,N)` white ri
 
 ## Shapes
 
-The shape language is **Vercel-standard** — a consistent 6px default radius (`--luma-radius-md`) that feels modern without being pill-heavy. Never mix radius scales within a single component group.
+The shape language is **Vercel-standard**, a consistent 6px default radius (`--luma-radius-md`) that feels modern without being pill-heavy. Never mix radius scales within a single component group.
 
 ```css
 var(--luma-radius-none)  /* 0px */
 var(--luma-radius-xs)    /* 2px */
 var(--luma-radius-sm)    /* 4px */
-var(--luma-radius-md)    /* 6px — default for all interactive components */
+var(--luma-radius-md)    /* 6px: default for all interactive components */
 var(--luma-radius-lg)    /* 8px */
-var(--luma-radius-xl)    /* 12px — cards, panels */
+var(--luma-radius-xl)    /* 12px: cards: panels */
 var(--luma-radius-2xl)   /* 16px */
-var(--luma-radius-full)  /* 9999px — pills, avatars, badges */
+var(--luma-radius-full)  /* 9999px: pills, avatars, badges */
 ```
 
 Motion tokens keep interactions feeling snappy, never sluggish:
 
 ```css
-var(--luma-duration-instant)  /* 75ms  — micro-feedback */
-var(--luma-duration-fast)     /* 150ms — hover, small transitions */
-var(--luma-duration-normal)   /* 250ms — standard */
-var(--luma-duration-slow)     /* 400ms — panels, larger shifts */
-var(--luma-ease-out)          /* cubic-bezier(0, 0, 0.2, 1) */
-var(--luma-ease-in-out)       /* cubic-bezier(0.4, 0, 0.2, 1) */
-var(--luma-ease-spring)       /* cubic-bezier(0.16, 1, 0.3, 1) */
-var(--luma-ease-bounce)       /* cubic-bezier(0.34, 1.56, 0.64, 1) */
+var(--luma-duration-instant)  /* 75ms: micro-feedback */
+var(--luma-duration-fast)     /* 150ms: hover: small transitions */
+var(--luma-duration-normal)   /* 250ms: standard */
+var(--luma-duration-slow)     /* 400ms: panels, larger shifts */
+var(--luma-ease-out)          /* cubic-bezier(0: 0, 0.2, 1) */
+var(--luma-ease-in-out)       /* cubic-bezier(0.4: 0, 0.2, 1) */
+var(--luma-ease-spring)       /* cubic-bezier(0.16: 1, 0.3, 1) */
+var(--luma-ease-bounce)       /* cubic-bezier(0.34: 1.56, 0.64, 1) */
 ```
 
 ---
 
 ## Iconography
 
-Luma uses **Lucide** (`lucide-react`) for every icon. 1,500+ open-source icons designed on a consistent 24×24 grid with rounded stroke endings. Tree-shakeable — only the icons you import ship to production.
+Luma uses **Lucide** (`lucide-react`) for every icon. 1,500+ open-source icons designed on a consistent 24×24 grid with rounded stroke endings. Tree-shakeable, only the icons you import ship to production.
 
 ### Sizes & strokes
 
-Four canonical icon sizes. Stroke weight scales with size — small icons get a thinner stroke so they don't visually overpower nearby text.
+Four canonical icon sizes. Stroke weight scales with size: small icons get a thinner stroke so they don't visually overpower nearby text.
 
 | Token | Size | Stroke weight | Use |
 |---|---|---|---|
@@ -511,21 +513,21 @@ Four canonical icon sizes. Stroke weight scales with size — small icons get a 
 
 **The rule for stroke width:** under 20px → 1px stroke. 20px and up → 2px stroke. No exceptions.
 
-**The rule for buttons:** every Button icon — leading, trailing, or icon-only — is **20px** at 2px stroke, regardless of the Button's `size` prop. A `size="sm"` Button still gets a 20px icon. This keeps icon clarity consistent across the system and gives icon-only buttons the visual weight they need.
+**The rule for buttons:** every Button icon (leading, trailing, or icon-only) is **20px** at 2px stroke, regardless of the Button's `size` prop. A `size="sm"` Button still gets a 20px icon. This keeps icon clarity consistent across the system and gives icon-only buttons the visual weight they need.
 
 ```tsx
-// Button — always 20px icon
+// Button. Always 20px icon
 <Button size="sm">
   <Plus className="size-5" />  {/* 5 × 4 = 20px */}
   Add item
 </Button>
 
-// Input — 16px icon
+// Input: 16px icon
 <Input>
   <Search className="size-4" />  {/* 4 × 4 = 16px */}
 </Input>
 
-// Badge — 12px icon
+// Badge: 12px icon
 <Badge>
   <Check className="size-3" />  {/* 3 × 4 = 12px */}
   Active
@@ -534,7 +536,7 @@ Four canonical icon sizes. Stroke weight scales with size — small icons get a 
 
 ### Colour
 
-Icons inherit colour from the parent's `currentColor`. Don't apply explicit colours — set the text colour on the parent and the icon will follow.
+Icons inherit colour from the parent's `currentColor`. Don't apply explicit colours; set the text colour on the parent and the icon will follow.
 
 ```tsx
 {/* ✓ icon inherits */}
@@ -544,7 +546,7 @@ Icons inherit colour from the parent's `currentColor`. Don't apply explicit colo
 <Info className="text-fg-muted" />
 ```
 
-For status / variant icons (e.g., the icon inside an `Alert` matching its variant), the component wires the right colour automatically via slot-targeted classes — never set the icon colour by hand.
+For status / variant icons (e.g., the icon inside an `Alert` matching its variant), the component wires the right colour automatically via slot-targeted classes. Never set the icon colour by hand.
 
 ---
 
@@ -552,7 +554,7 @@ For status / variant icons (e.g., the icon inside an `Alert` matching its varian
 
 When building component sets in Figma (via the plugin API or by hand), follow these conventions so the file stays consistent and Code Connect mappings work end-to-end.
 
-### Variable bindings — mandatory
+### Variable bindings are mandatory
 
 Every layout-affecting value must be bound to a Variable. Never hardcode.
 
@@ -568,12 +570,12 @@ Every layout-affecting value must be bound to a Variable. Never hardcode.
 
 ### Figma plugin API gotchas
 
-- **`cornerRadius` binding splits into 4 corners** — bind `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, `bottomRightRadius` individually.
-- **`strokeWeight` binding splits into 4 per-side** — the API call is single, but `boundVariables` reads back as `strokeTopWeight`, etc.
-- **INSTANCE nodes support `width` OR `height` binding, not both** — Figma platform limit. For square icons, bind `width` only; the height pairs naturally.
-- **Set `layoutSizingHorizontal/Vertical` to `'FIXED'` before binding `width`/`height`** — even if it's already `'FIXED'`, re-set explicitly or the binding silently fails.
+- **`cornerRadius` binding splits into 4 corners**: bind `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, `bottomRightRadius` individually.
+- **`strokeWeight` binding splits into 4 per-side**: the API call is single, but `boundVariables` reads back as `strokeTopWeight`, etc.
+- **INSTANCE nodes support `width` OR `height` binding, not both**. Figma platform limit. For square icons, bind `width` only; the height pairs naturally.
+- **Set `layoutSizingHorizontal/Vertical` to `'FIXED'` before binding `width`/`height`**: even if it's already `'FIXED'`, re-set explicitly or the binding silently fails.
 - **Order of operations:** `parent.appendChild(child)` → set `layoutSizing*` → `setBoundVariable(...)`. Setting layout sizing before the child is in an auto-layout parent throws.
-- **Variable name lookup must be by `(collection, name)`** — `md` exists in both `📐 Radius` and as `Alias/md` in `📐 Spacing`. A flat name map collides.
+- **Variable name lookup must be by `(collection, name)`.** `md` exists in both `📐 Radius` and as `Alias/md` in `📐 Spacing`. A flat name map collides.
 
 ### Component-set anatomy
 
@@ -590,14 +592,14 @@ The first variant in the set becomes the default. Order your iteration so the mo
 
 ### Segmented control pattern (Tabs, ToggleGroup)
 
-When composing a segmented control — Tabs, ToggleGroup, segmented switches — items sit **flush** inside the container. Set `itemSpacing: 0` (no gap). The active item's filled background creates the visual "pill" against the muted track. Adding a gap breaks the segmented look and reads as separate buttons.
+When composing a segmented control (Tabs, ToggleGroup, segmented switches), items sit **flush** inside the container. Set `itemSpacing: 0` (no gap). The active item's filled background creates the visual "pill" against the muted track. Adding a gap breaks the segmented look and reads as separate buttons.
 
 ```
 ✓ flush     [ Overview | Activity | Settings ]   ← bg lines up
 ✗ gap=4     [ Overview ] [ Activity ] [ Settings ]  ← reads as buttons
 ```
 
-### Auto-layout sizing — the primary/counter axis trap
+### Auto-layout sizing: the primary/counter axis trap
 
 The biggest source of auto-layout bugs: `primaryAxisSizingMode` and `counterAxisSizingMode` map to **different physical axes depending on the layout direction**.
 
@@ -652,7 +654,7 @@ Every component exposes a set of CSS custom properties prefixed with its name. U
 }
 ```
 
-**Quick reference** (most common — full list in `src/tokens/components.css`):
+**Quick reference** (most common, full list in `src/tokens/components.css`):
 
 | Component | Key tokens |
 |---|---|
@@ -678,10 +680,10 @@ Every component exposes a set of CSS custom properties prefixed with its name. U
 | `Alert` | `--alert-{radius,padding,icon-size}` |
 
 **Where they live**: tokens split across two files in `src/tokens/`:
-- `components.generated.css` — auto-derived from the YAML front matter in this file. Run `pnpm tokens:gen-components` after editing the YAML.
-- `components.css` — hand-curated for per-size/per-state tokens that don't fit the YAML schema. Loaded second, so it can override the generated file.
+- `components.generated.css`: auto-derived from the YAML front matter in this file. Run `pnpm tokens:gen-components` after editing the YAML.
+- `components.css`: hand-curated for per-size/per-state tokens that don't fit the YAML schema. Loaded second, so it can override the generated file.
 
-**Don't edit `components.generated.css` by hand** — update the YAML in this file and regenerate.
+**Don't edit `components.generated.css` by hand**: update the YAML in this file and regenerate.
 
 ---
 
@@ -728,7 +730,7 @@ Every component exposes a set of CSS custom properties prefixed with its name. U
 </Container>
 ```
 
-All four accept `asChild` (via Radix Slot) to render as a different element while keeping styles. Gap values map to the `--luma-space-*` scale — `xs`=4px, `sm`=8px, `md`=16px, `lg`=24px, `xl`=32px, `2xl`=48px, `3xl`=64px.
+All four accept `asChild` (via Radix Slot) to render as a different element while keeping styles. Gap values map to the `--luma-space-*` scale: `xs`=4px, `sm`=8px, `md`=16px, `lg`=24px, `xl`=32px, `2xl`=48px, `3xl`=64px.
 
 | Primitive | Use for | Key props |
 |---|---|---|
@@ -744,7 +746,7 @@ All four accept `asChild` (via Radix Slot) to render as a different element whil
 - Filled buttons: NO shadow. The solid colour is the affordance.
 - Outline buttons: `shadow` (xs) to give subtle depth from the border.
 - Ghost and Link: NO shadow. Intentionally flat.
-- Warning uses a **dark foreground** (not white) — amber fails WCAG with white text.
+- Warning uses a **dark foreground** (not white). Amber fails WCAG with white text.
 
 ```tsx
 <Button variant="default">Primary action</Button>
@@ -759,7 +761,7 @@ All four accept `asChild` (via Radix Slot) to render as a different element whil
 
 ### Inputs & Forms
 
-Height is `h-9` (36px) to match buttons. Border uses `--input`, not `--border`, to distinguish form controls from layout dividers. Error state adds `ring-1 ring-destructive` — never change the border width (causes layout shift).
+Height is `h-9` (36px) to match buttons. Border uses `--input`, not `--border`, to distinguish form controls from layout dividers. Error state adds `ring-1 ring-destructive`. Never change the border width (causes layout shift).
 
 ### Cards
 
@@ -855,27 +857,31 @@ export function Card({ className, elevated, ...props }: CardProps) {
 ## Do's and Don'ts
 
 **Do:**
-- Use semantic aliases (`--primary`, `--background`) in components — always
+- Use semantic aliases (`--primary`, `--background`) in components, always
 - Use `--primary-hover` / `--primary-pressed` / `--primary-disabled` for CTA states
 - Use `--error` for validation UI; use `--destructive` for irreversible action buttons
-- Use `--primary-subtle` / `--primary-muted` for tinted surfaces — never raw `--luma-brand-*`
+- Use `--primary-subtle` / `--primary-muted` for tinted surfaces. Never raw `--luma-brand-*`
 - Use Radix primitives for all interactive, focusable elements
 - Export TypeScript interfaces extending HTML/Radix element props from every component
 - Keep all dark-mode overrides in `src/tokens/color.css` under `.dark {}`
-- Alias every dark-mode surface to a `--luma-neutral-*` primitive — never use raw `oklch()` literals in `.dark {}`
+- Alias every dark-mode surface to a `--luma-neutral-*` primitive. Never use raw `oklch()` literals in `.dark {}`
 - Use `cn()` from `@/lib/utils` for conditional class composition
-- Apply `warning` variant with dark text — amber + white fails WCAG AA
+- Apply `warning` variant with dark text. Amber plus white fails WCAG AA at 1.94:1
+- Run `node scripts/check.mjs` after any token edit. All three checks must pass
 - Use `shadow` (xs) on outline/bordered controls; no shadow on filled buttons
 
 **Don't:**
-- Never hardcode hex, rgb, hsl, or oklch values in components — use CSS vars
-- Never hardcode spacing in px — use `--luma-space-*` vars or Tailwind classes
-- Never write raw `oklch()` literals inside `.dark {}` — always alias to `--luma-neutral-*` so the scale stays the single perceptual source of truth
+- Never hardcode hex, rgb, hsl, or oklch values in components. Use CSS vars
+- Never hardcode spacing in px. Use `--luma-space-*` vars or Tailwind classes
+- Never write raw `oklch()` literals inside `.dark {}`. Always alias to `--luma-neutral-*` so the scale stays the single perceptual source of truth
 - Never write `.dark {}` overrides inside component files
-- Never use primitive vars (`--luma-brand-500`) in components — only semantic aliases
-- Never use `--destructive` for validation errors — that's `--error` and `--luma-error-*`
-- Never use raw `<div onClick>` for dialogs, menus, or tooltips — always Radix
+- Never use primitive vars (`--luma-brand-500`) in components, only semantic aliases
+- Never use `--destructive` for validation errors. That's `--error` and `--luma-error-*`
+- Never use raw `<div onClick>` for dialogs, menus, or tooltips. Always Radix
 - Never apply `shadow-md` or higher to buttons or small form controls
+- Never place `--fg-subtle` on `--bg-element` or darker. It fails AA there, so use `--fg-muted`
+- Never lighten `--success` or `--info` for aesthetic reasons. Both sit exactly on the 4.54:1 AA line for white labels
+- Never hand-write a contrast ratio into the docs. Generate it with `node scripts/check-contrast.mjs --table`
 
 ---
 
@@ -903,23 +909,23 @@ ring-ring               → var(--ring)
 <html class="dark"> <!-- dark -->
 ```
 
-All overrides live in `src/tokens/color.css` under `.dark {}`. Components themed automatically — zero per-component overrides needed or allowed.
+All overrides live in `src/tokens/color.css` under `.dark {}`. Components themed automatically: zero per-component overrides needed or allowed.
 
 ### Dark-mode surface ladder (OKLCH)
 
-Each dark surface aliases to a stop on the `--luma-neutral-*` scale. The scale has *two extra stops at the dark end* (`-750`, `-850`) so layered surfaces stay perceptually distinct — popovers visibly float above cards, cards visibly lift off the page.
+Each dark surface aliases to a stop on the `--luma-neutral-*` scale. The scale has *two extra stops at the dark end* (`-750`, `-850`) so layered surfaces stay perceptually distinct: popovers visibly float above cards, cards visibly lift off the page.
 
-| Token | Alias | Luminance | Use |
+| Token | Alias | OKLCH L | Use |
 |---|---|---|---|
-| `--background` / `--bg-1` | `--luma-neutral-900` | ~7% | Page background |
-| `--bg-2` | `--luma-neutral-850` | ~10% | Sidebars, recessed sections |
-| `--card` / `--bg-element` | `--luma-neutral-800` | ~13% | Cards, default element |
-| `--popover` / `--bg-element-hover` | `--luma-neutral-750` | ~16% | Popovers, dropdowns, hover |
-| `--bg-element-active` | `--luma-neutral-700` | ~21% | Pressed / selected |
+| `--background` / `--bg-1` | `--luma-neutral-900` | L 0.178 | Page background |
+| `--bg-2` | `--luma-neutral-850` | L 0.210 | Sidebars, recessed sections |
+| `--card` / `--bg-element` | `--luma-neutral-800` | L 0.250 | Cards, default element |
+| `--popover` / `--bg-element-hover` | `--luma-neutral-750` | L 0.290 | Popovers, dropdowns, hover |
+| `--bg-element-active` | `--luma-neutral-700` | L 0.333 | Pressed / selected |
 
-**Why two extra stops:** dark UIs need finer granularity at the dark end. A standard `50→950` ladder gives one step every ~7% luminance — too coarse to separate four+ stacked layers. The extra `-750` and `-850` halve that to ~3% steps where it matters most. Linear, Vercel, Notion all do the same.
+**Why two extra stops:** dark UIs need finer granularity at the dark end. A standard `50→950` ladder steps about 0.08 in OKLCH lightness at a time, too coarse to separate four or more stacked layers. The extra `-750` and `-850` halve that to roughly 0.04 where it matters most. Linear, Vercel, Notion all do the same.
 
-**Borders in dark mode** are translucent white (`rgba(255,255,255, 0.05–0.14)`) — never opaque grey — so they read as edge highlights rather than competing surfaces:
+**Borders in dark mode** are translucent white (`rgba(255,255,255, 0.05–0.14)`), never opaque grey, so they read as edge highlights rather than competing surfaces:
 ```css
 --border-subtle:   rgba(255,255,255, 5%);   /* faint */
 --border-default:  rgba(255,255,255, 8%);   /* default */
@@ -930,7 +936,7 @@ Each dark surface aliases to a stop on the `--luma-neutral-*` scale. The scale h
 
 ### Figma-CSS sync rule
 
-The OKLCH primitives in `color.css` are the **single source of truth**. The Figma file mirrors them: every `Neutral/N` primitive's sRGB value in Figma is computed from its OKLCH definition. Surface tokens in Figma (`Surface/BG 1`, `Core/Card`, `Core/Popover`, etc.) alias to neutral primitives — never store standalone sRGB values. To regenerate Figma values after a palette tweak: edit OKLCH in `color.css`, then run the Figma plugin's OKLCH→sRGB converter against the updated values.
+The OKLCH primitives in `color.css` are the **single source of truth**. The Figma file mirrors them: every `Neutral/N` primitive's sRGB value in Figma is computed from its OKLCH definition. Surface tokens in Figma (`Surface/BG 1`, `Core/Card`, `Core/Popover`, etc.) alias to neutral primitives. Never store standalone sRGB values. To regenerate Figma values after a palette tweak: edit OKLCH in `color.css`, then run the Figma plugin's OKLCH→sRGB converter against the updated values.
 
 ---
 
@@ -978,4 +984,4 @@ Publish: `pnpm figma:publish`
 
 ## About
 
-Luma was designed and built by [Imran](https://imran.fi/) — a Senior Product Designer focused on design systems and AI-assisted workflows.
+Luma was designed and built by [Imran](https://imran.fi/), a Senior Product Designer focused on design systems and AI-assisted workflows.

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// check-tokens.mjs — drift guard for Luma's machine-readable layer.
+// check-tokens.mjs: drift guard for Luma's machine-readable layer.
 // Verifies that tokens.json and registry.json stay consistent with DESIGN.md,
 // the canonical source. No dependencies. Run: node scripts/check-tokens.mjs
 //
@@ -9,6 +9,13 @@
 //      (rgba values are compared against their 8-digit hex equivalents).
 //   3. Every token a component binds in registry.json resolves to a real
 //      token in tokens.json (wildcard "<group>.*" bindings are skipped).
+//   4. Every component in registry.json has at least one spec entry in the
+//      DESIGN.md components block, because the registry cannot claim a component
+//      the canonical spec does not describe.
+//   5. The component counts written in the prose (README.md, llms.txt, DESIGN.md)
+//      match the real count. Prose numbers drifted silently before this check
+//      existed: the repo simultaneously claimed 45, 52 and 56 components.
+//   6. The version string agrees across DESIGN.md, tokens.json and registry.json.
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -32,6 +39,9 @@ if (errors.length) { report(); process.exit(1); }
 const rgbaToHex = {
   'rgba(0,96,212,0.30)': '#0060d44d',
   'rgba(0,0,0,0.50)': '#00000080',
+  'rgba(255,255,255,0.08)': '#ffffff14',
+  'rgba(255,255,255,0.14)': '#ffffff24',
+  'rgba(255,255,255,0.05)': '#ffffff0d',
 };
 const designColors = {};
 for (const line of read('DESIGN.md').split('\n')) {
@@ -49,7 +59,7 @@ for (const [name, def] of Object.entries(tokens.color || {})) {
     fail(`color.${name}: tokens.json="${got}" but DESIGN.md="${expected}"`);
   }
 }
-if (!colorsChecked) fail('no colors cross-checked — DESIGN.md parsing likely broke');
+if (!colorsChecked) fail('no colors cross-checked, so DESIGN.md parsing likely broke');
 
 // ── 3. registry token bindings resolve in tokens.json ────────────────────────
 const resolve = (path) => {
@@ -67,6 +77,75 @@ for (const c of registry.components || []) {
   }
 }
 
+// ── 4. Every registry component is specified in DESIGN.md ────────────────────
+// The registry names components in PascalCase; the DESIGN.md components block
+// keys them in kebab-case and often splits one component across several state
+// entries (Select → select-trigger, select-menu, select-item). This map is
+// explicit rather than inferred, so a rename fails loudly instead of silently
+// matching nothing and reporting full coverage.
+const designMd = read('DESIGN.md');
+const componentsBlock = designMd.slice(
+  designMd.indexOf('\ncomponents:'),
+  designMd.indexOf('\nicons:')
+);
+const specKeys = new Set(
+  [...componentsBlock.matchAll(/^  ([a-zA-Z][a-zA-Z0-9_-]*):/gm)].map((m) => m[1])
+);
+if (specKeys.size < 50) fail(`only ${specKeys.size} spec keys parsed from DESIGN.md, so the components block format changed and this check went blind`);
+
+const prefixFor = (name) =>
+  name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+const ALIAS = {
+  RadioGroup: 'radio',
+  DropdownMenu: 'dropdown-menu',
+  Command: 'command',
+  NavItem: 'nav-item',
+  Form: 'form',
+  Progress: 'progress',
+  Table: 'table',
+  Tabs: 'tabs',
+  Accordion: 'accordion',
+  Breadcrumb: 'breadcrumb',
+  Pagination: 'pagination',
+  Slider: 'slider',
+  Switch: 'switch',
+  ScrollArea: 'scroll-area',
+  Collapsible: 'collapsible',
+  IconButton: 'icon-button',
+};
+let covered = 0;
+for (const c of registry.components || []) {
+  const prefix = ALIAS[c.name] ?? prefixFor(c.name);
+  const hit = [...specKeys].some((k) => k === prefix || k.startsWith(prefix + '-'));
+  if (hit) covered++;
+  else fail(`registry component "${c.name}" has no spec entry in DESIGN.md (looked for "${prefix}" or "${prefix}-*")`);
+}
+
+// ── 5. Prose counts match reality ────────────────────────────────────────────
+const realCount = (registry.components || []).length;
+const countClaims = [
+  ['README.md', /(\d+)\+? component specs/],
+  ['llms.txt', /~?(\d+) component specs/],
+  ['DESIGN.md', /~?(\d+) component specs/],
+];
+for (const [file, re] of countClaims) {
+  const text = file === 'DESIGN.md' ? designMd : read(file);
+  const m = text.match(re);
+  if (!m) { fail(`${file}: no component-count claim found, so the wording changed and this check went blind`); continue; }
+  if (Number(m[1]) !== realCount) {
+    fail(`${file}: claims ${m[1]} component specs, registry.json has ${realCount}`);
+  }
+}
+
+// ── 6. Version agreement ─────────────────────────────────────────────────────
+const designVersion = designMd.match(/^version:\s*"([^"]+)"/m)?.[1];
+const tokensVersion = tokens.$extensions?.['com.luma']?.version;
+const registryVersion = registry.version;
+if (!designVersion) fail('DESIGN.md: no version in front matter');
+for (const [label, v] of [['tokens.json', tokensVersion], ['registry.json', registryVersion]]) {
+  if (v !== designVersion) fail(`${label} version "${v}" does not match DESIGN.md "${designVersion}"`);
+}
+
 // ── Report ───────────────────────────────────────────────────────────────────
 function report() {
   if (errors.length) {
@@ -76,4 +155,7 @@ function report() {
 }
 report();
 if (errors.length) process.exit(1);
-console.log(`✓ machine-readable layer in sync — ${colorsChecked} colors, ${bindingsChecked} token bindings, ${registry.components.length} components.`);
+console.log(
+  `✓ machine-readable layer in sync: ${colorsChecked} colors, ${bindingsChecked} token bindings, ` +
+  `${covered}/${registry.components.length} components specified in DESIGN.md, v${designVersion} across all three files.`
+);

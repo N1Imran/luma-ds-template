@@ -1,22 +1,30 @@
 # Luma Design System
 
-> An AI-readable design system specification. Luma answers one question: what does it take for an AI coding tool to generate UI that is already on-brand, with no style cleanup and no back-and-forth? The repo is the documentation layer — a canonical spec, machine-readable token and component data, and always-on rules.
+> An AI-readable design system specification. Luma answers one question: what does it take for an AI coding tool to generate UI that is already on-brand, with no style cleanup and no back-and-forth? The repo is the documentation layer, a canonical spec, machine-readable token and component data, and always-on rules.
 
 Read order for an agent building UI with Luma: start with AGENTS.md (orchestration), load the rules from CLAUDE.md, then pull tokens.json (foundation) and the relevant entry from registry.json (component). Use DESIGN.md for the full reasoning when a decision is ambiguous. JSON files are the source for values and component shapes; Markdown files are the source for rules and rationale.
 
 ## Specification (canonical)
 
-- [DESIGN.md](DESIGN.md): The canonical brand spec. Machine-readable tokens in YAML front matter (colors, typography, spacing, radius, ~45 component specs, icons, motion, elevation, z-index), human-readable rationale and rules in the prose. Source of truth — if any file disagrees, DESIGN.md wins.
+- [DESIGN.md](DESIGN.md): The canonical brand spec. Machine-readable tokens in YAML front matter (colors, typography, spacing, radius, 52 component specs, icons, motion, elevation, z-index), human-readable rationale and rules in the prose. Source of truth, if any file disagrees, DESIGN.md wins.
 - [CLAUDE.md](CLAUDE.md): The engineering constitution. Three-layer token architecture, component patterns, dark-mode rules, iconography, Figma conventions. Read automatically by Claude Code each session.
 - [AGENTS.md](AGENTS.md): Orchestration entry point for every agent (Cursor, Codex, Gemini CLI). Always-on rules and pointers to the files above.
 
 ## Machine-readable data
 
-- [tokens.json](tokens.json): Foundation tokens in W3C DTCG format — colors, spacing, radius, typography, duration, easing, shadow, z-index. sRGB hex mirrors of the canonical OKLCH values. Ingestible by Style Dictionary, Tokens Studio, Stitch, Cursor, v0.
-- [registry.json](registry.json): Component manifest — variants, sizes, states, token bindings, rules, and example usage for every component. Specification-only (no installable code in this repo).
+- [tokens.json](tokens.json): Foundation tokens in W3C DTCG format: colors, spacing, radius, typography, duration, easing, shadow, z-index. sRGB hex mirrors of the canonical OKLCH values. Ingestible by Style Dictionary, Tokens Studio, Stitch, Cursor, v0.
+- [registry.json](registry.json): Component manifest: variants, sizes, states, token bindings, rules, and example usage for every component. Specification-only (no installable code in this repo).
 - [MACHINE-READABLE.md](MACHINE-READABLE.md): How the token, rules, and component layers fit together, and how an AI tool or registry should consume Luma.
+
+## Verification
+
+- `scripts/check.mjs`: Runs all three drift guards. Every number the spec publishes about itself (contrast ratios, OKLCH coordinates, component counts, version strings) is computed and asserted rather than hand-written.
+- `scripts/check-contrast.mjs`: WCAG ratios computed from the shipped hex. `--table` regenerates the contrast table in DESIGN.md.
+- `scripts/check-oklch.mjs`: Asserts every published OKLCH coordinate against the hex beside it.
+- `scripts/check-tokens.mjs`: Asserts the JSON exports, component coverage, prose counts and version against DESIGN.md.
 
 ## Meta
 
 - [README.md](README.md): Human-facing overview.
+- [CHANGELOG.md](CHANGELOG.md): Version history. v1.4.0 fixed two WCAG failures plus every published contrast ratio, OKLCH coordinate and hue.
 - [LICENSE](LICENSE): CC BY-NC-ND 4.0. Clone, study, and test with AI tools; no commercial use, no derivatives.

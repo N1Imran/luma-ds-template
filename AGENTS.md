@@ -22,6 +22,7 @@ JSON files (`tokens.json`, `registry.json`) are the source for values and compon
 - Never place `ink-subtle` on `surface-2` or darker. It drops to 4.31:1 and fails AA. Use `ink-muted` there.
 - Never lighten `success` or `info`. Both sit exactly on the 4.54:1 AA line for white labels.
 - If you change a color, run `node scripts/check.mjs`. It asserts contrast, OKLCH and export consistency, and fails on drift.
+- After generating any UI, run `node scripts/check-hardcoded.mjs` (also part of `check.mjs`). It fails the build on a hardcoded hex color or a raw px spacing/radius value in the code you just wrote, enforcing the rule stated two bullets up instead of merely stating it.
 
 ## License note
 

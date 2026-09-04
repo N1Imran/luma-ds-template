@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Settings — Luma spec test</title>
+<style>
+  /* ── Layer 1: primitives (raw values, straight from tokens.json / DESIGN.md front matter) ── */
+  :root {
+    --luma-brand-600: #0060d4;
+    --luma-brand-500: #1472e8;
+    --luma-brand-700: #004fb8;
+    --luma-neutral-0:   #ffffff;
+    --luma-neutral-50:  #f9f9fb;
+    --luma-neutral-100: #f2f2f5;
+    --luma-neutral-200: #e8e8ed;
+    --luma-neutral-300: #d5d5dc;
+    --luma-red-600: #e03131;
+    --luma-red-700: #c02020;
+  }
+
+  /* ── Layer 2: semantic aliases (what components reference — DESIGN.md `colors:`, `spacing:`, `rounded:`) ── */
+  :root {
+    --canvas: var(--luma-neutral-0);
+    --surface-1: var(--luma-neutral-50);
+    --surface-2: var(--luma-neutral-100);
+    --surface-hover: var(--luma-neutral-200);
+    --surface-active: var(--luma-neutral-300);
+
+    --ink: #0f0f16;
+    --ink-body: #181820;
+    --ink-muted: #55556b;
+    --ink-subtle: #71717e;
+    --ink-disabled: #a4a4b0;
+
+    --hairline: #e8e8ed;
+    --hairline-strong: #d5d5dc;
+
+    --primary: var(--luma-brand-600);
+    --primary-hover: var(--luma-brand-500);
+    --primary-pressed: var(--luma-brand-700);
+    --primary-ring: rgba(0,96,212,0.30);
+    --on-primary: #ffffff;
+    --primary-subtle: #eef2ff;
+
+    --destructive: var(--luma-red-600);
+    --destructive-hover: var(--luma-red-700);
+    --on-destructive: #ffffff;
+    --error-bg: #fff0f0;
+    --error-border: #f5a0a0;
+    --error-text: #8b1b1b;
+
+    /* spacing scale, DESIGN.md `spacing:` — 12px has no t-shirt alias by design,
+       so it's named on the numeric scale instead, matching DESIGN.md's own note */
+    --space-xs: 4px; --space-sm: 8px; --luma-space-3: 12px; --space-md: 16px;
+    --space-lg: 24px; --space-xl: 32px; --space-2xl: 48px;
+
+    /* radius scale, DESIGN.md `rounded:` */
+    --rounded-sm: 4px; --rounded-md: 6px; --rounded-lg: 8px; --rounded-xl: 12px;
+
+    /* layout, DESIGN.md `layout:` */
+    --sidebar-width: 240px;
+    --container-md: 768px; /* layout.container.md: two-up cards / standard form width */
+
+    /* typography scale, DESIGN.md `typography:` — named per role, not per use site */
+    --text-heading-size: 32px; --text-heading-weight: 700; --text-heading-tracking: -0.025em;
+    --text-subtitle-size: 20px; --text-subtitle-weight: 600; --text-subtitle-leading: 1.375;
+    --text-body-size: 16px;
+    --text-body-sm-size: 14px; --text-body-sm-strong-weight: 500;
+    --text-caption-size: 12px;
+    --text-eyebrow-size: 12px; --text-eyebrow-weight: 500; --text-eyebrow-tracking: 0.08em;
+
+    /* component tokens: per-component slots that don't carry a shared semantic
+       name — DESIGN.md's own component specs write these as literals too */
+    --control-height: 36px;
+    --nav-item-padding: 6px var(--luma-space-3);
+    --nav-item-gap: 2px;
+    --nav-item-active-indicator: 2px;
+    --nav-item-active-padding-left: 10px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface-1);
+    color: var(--ink-body);
+    font-family: Geist, Inter, system-ui, sans-serif;
+    font-size: var(--text-body-size);
+    line-height: 1.5;
+  }
+
+  /* ── Layer 3: components (per DESIGN.md `components:` specs — every dimension
+     below resolves to a token defined above, never a bare literal) ── */
+
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--surface-1);
+    border-right: 1px solid var(--hairline);
+    padding: var(--space-lg) var(--space-sm);
+  }
+  .sidebar-brand {
+    font-weight: var(--text-subtitle-weight);
+    font-size: var(--text-subtitle-size);
+    letter-spacing: var(--text-heading-tracking);
+    padding: 0 var(--space-sm);
+    margin-bottom: var(--space-lg);
+    color: var(--ink);
+  }
+
+  /* nav-item / nav-item-hover / nav-item-active, DESIGN.md */
+  .nav-item {
+    display: flex; align-items: center; gap: var(--space-sm);
+    color: var(--ink-muted);
+    font-size: var(--text-body-sm-size); font-weight: var(--text-body-sm-strong-weight);
+    border-radius: var(--rounded-md);
+    padding: var(--nav-item-padding);
+    text-decoration: none;
+    margin-bottom: var(--nav-item-gap);
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--ink-body); }
+  .nav-item.active {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border-left: var(--nav-item-active-indicator) solid var(--primary);
+    padding-left: var(--nav-item-active-padding-left);
+  }
+
+  /* Main area centers its content column — settings live in the middle of the
+     available space, not pinned to the sidebar's edge */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-2xl);
+  }
+  .content { width: 100%; max-width: var(--container-md); }
+
+  h1 {
+    font-size: var(--text-heading-size); font-weight: var(--text-heading-weight);
+    letter-spacing: var(--text-heading-tracking);
+    margin: 0 0 var(--space-xs) 0; color: var(--ink);
+  }
+  .page-desc { color: var(--ink-muted); font-size: var(--text-body-size); margin: 0 0 var(--space-xl) 0; }
+
+  /* card, DESIGN.md */
+  .card {
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    border-radius: var(--rounded-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+  .card-title {
+    font-size: var(--text-subtitle-size); font-weight: var(--text-subtitle-weight);
+    margin: 0 0 var(--space-xs) 0; color: var(--ink);
+  }
+  .card-desc { font-size: var(--text-body-sm-size); color: var(--ink-muted); margin: 0 0 var(--space-lg) 0; }
+
+  .field { margin-bottom: var(--space-md); }
+  .field label {
+    display: block; font-size: var(--text-eyebrow-size); font-weight: var(--text-eyebrow-weight);
+    letter-spacing: var(--text-eyebrow-tracking); text-transform: uppercase;
+    color: var(--ink-muted); margin-bottom: var(--space-xs);
+  }
+
+  /* input-default / input-focus, DESIGN.md */
+  .field input {
+    width: 100%;
+    height: var(--control-height);
+    padding: 0 var(--luma-space-3);
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: var(--rounded-md);
+    font-family: inherit;
+    font-size: var(--text-body-sm-size); font-weight: var(--text-body-sm-strong-weight);
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-ring);
+  }
+
+  .row { display: flex; gap: var(--space-md); }
+  .row .field { flex: 1; }
+
+  /* button-primary / button-secondary / button-destructive, DESIGN.md */
+  .btn {
+    height: var(--control-height); padding: 0 var(--space-md); border-radius: var(--rounded-md);
+    font-size: var(--text-body-sm-size); font-weight: var(--text-body-sm-strong-weight);
+    border: none; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--primary); color: var(--on-primary); }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-secondary { background: var(--surface-2); color: var(--ink); }
+  .btn-secondary:hover { background: var(--surface-hover); }
+  .btn-destructive { background: var(--destructive); color: var(--on-destructive); }
+  .btn-destructive:hover { background: var(--destructive-hover); }
+
+  .actions { display: flex; gap: var(--space-sm); margin-top: var(--space-lg); }
+
+  /* Danger zone: destructive intent, error-toned surface per DESIGN.md destructive-vs-error rule */
+  .danger-zone {
+    border-color: var(--error-border);
+    background: var(--error-bg);
+  }
+  .danger-zone .card-title { color: var(--error-text); }
+  .danger-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: var(--space-md); border-top: 1px solid var(--error-border);
+  }
+  .danger-row:first-of-type { border-top: none; padding-top: 0; }
+  .danger-row + .danger-row { margin-top: var(--space-md); }
+  .danger-row-text strong { display: block; font-size: var(--text-body-sm-size); color: var(--ink); }
+  .danger-row-text span { font-size: var(--text-caption-size); color: var(--ink-muted); }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="sidebar">
+      <div class="sidebar-brand">Acme</div>
+      <a class="nav-item" href="#">Overview</a>
+      <a class="nav-item" href="#">Projects</a>
+      <a class="nav-item" href="#">Team</a>
+      <a class="nav-item active" href="#">Settings</a>
+      <a class="nav-item" href="#">Billing</a>
+    </nav>
+
+    <main class="main">
+      <div class="content">
+        <h1>Settings</h1>
+        <p class="page-desc">Manage your profile and account preferences.</p>
+
+        <section class="card">
+          <h2 class="card-title">Profile</h2>
+          <p class="card-desc">This information is visible to other members of your team.</p>
+
+          <div class="row">
+            <div class="field">
+              <label for="first">First name</label>
+              <input id="first" type="text" value="Imran" />
+            </div>
+            <div class="field">
+              <label for="last">Last name</label>
+              <input id="last" type="text" value="Muhammad" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" value="info@imran.fi" />
+          </div>
+
+          <div class="field">
+            <label for="role">Role</label>
+            <input id="role" type="text" value="Senior Product Designer" />
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary">Save changes</button>
+            <button class="btn btn-secondary">Cancel</button>
+          </div>
+        </section>
+
+        <section class="card danger-zone">
+          <h2 class="card-title">Danger zone</h2>
+          <p class="card-desc" style="color:var(--error-text)">Irreversible and destructive actions.</p>
+
+          <div class="danger-row">
+            <div class="danger-row-text">
+              <strong>Transfer ownership</strong>
+              <span>Move this workspace to another account.</span>
+            </div>
+            <button class="btn btn-secondary">Transfer</button>
+          </div>
+
+          <div class="danger-row">
+            <div class="danger-row-text">
+              <strong>Delete account</strong>
+              <span>Permanently delete your account and all data.</span>
+            </div>
+            <button class="btn btn-destructive">Delete account</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
